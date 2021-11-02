@@ -1,0 +1,10 @@
+#class (KEYWORD1)
+SRF05	KEYWORD1
+ 
+ 
+#function and method (KEYWORD2)
+getDistance	KEYWORD2
+ 
+ 
+#constant (LITERAL1)
+#none

@@ -2,7 +2,7 @@
  * Sample code to get DHT22 template and humidity
  */
 #include <DHT.h>
-#define dataPin 2
+#define dataPin 16
 #define DHTType DHT22
 DHT dht = DHT(dataPin, DHTType);
 void setup() {
