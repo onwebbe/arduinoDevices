@@ -1,14 +1,13 @@
 #include <Arduino.h>
 #include "HorerSensor.h"
-HorerSensor sensor = HorerSensor(17);
-HorerSensor* sensorPointer = &sensor;
+HorerSensor sensor = HorerSensor(16);
 void setup() {
     Serial.begin(9600);
 }
 
 void loop() {
   delay(2000);
-  Serial.printf("----avg start---- %f ----avg end----\n", sensorPointer->getAverageRPM());
+  Serial.printf("----avg start---- %f ----avg end----\n", sensor.getAverageRPM());
 }
 
 //struct Horor {

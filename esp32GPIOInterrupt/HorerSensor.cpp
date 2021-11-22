@@ -12,7 +12,7 @@ void ARDUINO_ISR_ATTR isrx(void* arg) {
     s->startTime = millis();
   }
   // 15s timeout
-  if (gap > timeout) {
+  if (gap > s->timeout) {
     s->startTime = millis();
   }
   if (gap > 200 && !s->newDataComming) {
@@ -20,9 +20,9 @@ void ARDUINO_ISR_ATTR isrx(void* arg) {
     s->latestGap = gap;
     s->startTime = millis();
     s->addGap(gap);
-    if (!isnan(gap) && gap > 0) {
-      Serial.printf("rpm: %u\n", 30000 / gap);
-    }
+//    if (!isnan(gap) && gap > 0) {
+//      Serial.printf("rpm: %u\n", 30000 / gap);
+//    }
   }
   s->newDataComming = !s->newDataComming;
 }
@@ -30,13 +30,14 @@ void ARDUINO_ISR_ATTR isrx(void* arg) {
 HorerSensor::HorerSensor(uint8_t horerPin) {
   PIN = horerPin;
   pinMode(PIN, INPUT_PULLUP);
+}
+void HorerSensor::init() {
   attachInterruptArg(PIN, isrx, this, FALLING);
   startTime = millis();
   for(int i = 0; i < 20; i++) {
     gapList[i] = -1;
   }
 }
-
 HorerSensor::~HorerSensor() {
 }
 void HorerSensor::addGap(long gap) {
@@ -47,18 +48,23 @@ void HorerSensor::addGap(long gap) {
 }
 float HorerSensor::getAverageRPM() {
   autoPopulateZeroGap();
-  int totalGap = 0;
-  int totalGapCount = 0;
+  float totalGap = 0;
+  float totalGapCount = 0;
   for(int i = 14; i < 20; i++) {
-    if (gapList[i] >= 0) {
+    if (gapList[i] > 0) {
       totalGap += gapList[i];
       totalGapCount++;
       Serial.println(gapList[i]);
     }
   }
   if (totalGapCount > 0) {
-    float calculatedGap = (float)totalGap / (float)totalGapCount;
-    return 3000 / calculatedGap;
+    float calculatedGap = totalGap / totalGapCount;
+    Serial.printf("totalGap:%lf gapCount:%lf calculted:%lf\n", totalGap, totalGapCount, calculatedGap);
+    if (calculatedGap > 0) {
+      return 30000 / calculatedGap;
+    } else {
+      return 0;
+    }
   } else {
     return 0;
   }
@@ -66,11 +72,12 @@ float HorerSensor::getAverageRPM() {
 float HorerSensor::getLatestRPM() {
   autoPopulateZeroGap();
   if (latestGap > 0) {
-    return 0;
+    return 30000.0 / latestGap;
   }
-  return 3000 / (float)latestGap;
+  return 0;
 }
 void HorerSensor::autoPopulateZeroGap() {
+  Serial.println("start autoPopulateZeroGap");
   endTime = millis();
   int gap = endTime - startTime;
   if (gap > timeout) {
@@ -80,4 +87,5 @@ void HorerSensor::autoPopulateZeroGap() {
     }
     startTime = millis();
   }
+  Serial.println("end autoPopulateZeroGap");
 }

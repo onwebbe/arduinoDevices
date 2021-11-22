@@ -1,28 +1,38 @@
 #include <DHT.h>
 #include <Adafruit_BMP085.h>
 #include <ArduinoJson.h>
+#include "HorerSensor.h"
 #include "WeatherDataRetriver.h"
+#include <WeatherDisplay.h>
 #define DHTType DHT22
 #define ADDR 0b0100011
 
 
-WeatherDataRetriver::WeatherDataRetriver(uint8_t dht22Pin) {
+WeatherDataRetriver::WeatherDataRetriver(int dht22Pin, int hornerPin, int rainDropPin) {
   this->_dht22Pin = dht22Pin;
+  this->_hornerSensorPin = hornerPin;
+  this->_rainDropPin = rainDropPin;
 }
 WeatherDataRetriver::~WeatherDataRetriver() {
   delete _dht;
+  delete _horner;
 }
 void WeatherDataRetriver::init() {
+  // display
+  WeatherDisplay weatherDisplay = WeatherDisplay();
+  
+  _weatherDisplay = &weatherDisplay;
+  _weatherDisplay->init();
   // Init dht22
-//  Serial.println("start dht22");
-//  _dht = new DHT(this->_dht22Pin, DHTType);
-//  _dht->begin();
-//  Serial.println("start dht22 done");
+  Serial.println("start dht22");
+  _dht = new DHT(this->_dht22Pin, DHTType);
+  _dht->begin();
+  Serial.println("start dht22 done");
 
   // Init bmp180
-//  Serial.println("start bmp180");
-//  _bmp180.begin();
-//  Serial.println("start BMP180 done");
+  Serial.println("start bmp180");
+  _bmp180.begin();
+  Serial.println("start BMP180 done");
 
   // Init GY30
   Serial.println("start GY30");
@@ -31,39 +41,51 @@ void WeatherDataRetriver::init() {
   Wire.write(0b00000001);
   Wire.endTransmission();
   Serial.println("start GY30");
+
+  // Init RainDrop
+  Serial.println("start RainDrop");
+  pinMode(_rainDropPin, INPUT);
+  
+  // Init Horner wind speed
+  _horner = new HorerSensor(this->_hornerSensorPin);
+  _horner->init();
 }
 
 String WeatherDataRetriver::getWeatherData() {
-  
-  
-
-//  float t = getTemperature();
-//  float h = getHumidity();
-//  float p = getPressure();
+  float t = getTemperature();
+  float h = getHumidity();
+  float p = getPressure();
   int l = getGY30Data();  
+  int r = isRain();
+  float w = getWindSpeed();
+  _weatherDisplay->displayData(t, h, l, w, p, r);
   //Print out the Temperature
   
   // object["pressure"] = this->_bmp180->readPressure() / 100.0;
   String resultString = "";
-//  String tstr = String(t, 1);
-//  String hstr = String(h, 1);
-//  String pstr = String(p, 0);
+  String tstr = String(t, 1);
+  String hstr = String(h, 0);
+  String pstr = String(p, 0);
   String lstr = String(l);
+  String wstr = String(w);
+  String rstr = (r == 1 ? "true":"false");
 //  resultString.concat(tstr);
 //  resultString.concat("|");
 //  resultString.concat(hstr);
 //  resultString.concat("|");
 //  resultString.concat(pstr);
 //  resultString.concat("|");
-  resultString.concat(lstr);
+//  resultString.concat(lstr);
   
 
   StaticJsonDocument<1024> rootDoc;
   JsonObject object = rootDoc.createNestedObject();
-//  object["temperature"] = tstr;
-//  object["humidity"] = hstr;
-//  object["pressure"] = pstr;
+  object["temperature"] = tstr;
+  object["humidity"] = hstr;
+  object["pressure"] = pstr;
   object["light"] = lstr;
+  object["wind"] = wstr;
+  object["rain"] = rstr;
   serializeJson(object, resultString);
   return resultString;
 }
@@ -79,7 +101,7 @@ float WeatherDataRetriver::getTemperature() {
   return t;
 }
 float WeatherDataRetriver::getHumidity() {
-  Serial.println("start read Temperature");
+  Serial.println("start read Humidity");
   double h = this->_dht->readHumidity();
   Serial.println("Humidity: ");
   if (!isnan(h)) {
@@ -90,7 +112,7 @@ float WeatherDataRetriver::getHumidity() {
   return h;
 }
 float WeatherDataRetriver::getPressure() {
-  Serial.println("start read Temperature");
+  Serial.println("start read Pressure");
   float presure = _bmp180.readPressure() / 100.0;
   Serial.println("Pressure: ");
   Serial.print(presure);
@@ -121,4 +143,14 @@ int WeatherDataRetriver::getGY30Data() {
   Serial.println(val);
   Serial.println("OK");
   return val;
+}
+float WeatherDataRetriver::getWindSpeed() {
+  return _horner->getAverageRPM();
+  // return 0;
+}
+boolean WeatherDataRetriver::isRain() {
+  int isRainDrop = digitalRead(_rainDropPin);
+  Serial.println("isRain" + isRainDrop);
+  return isRainDrop == 1 ? true: false;
+  // return 0;
 }

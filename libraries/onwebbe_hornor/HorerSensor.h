@@ -10,12 +10,12 @@ class HorerSensor {
   public:
     uint8_t PIN;
     uint32_t numberSensorHits;
-    bool newDataComming;
-    unsigned long latestGap;
-    long gapList[20];
-    long startTime;
-    long endTime;
-    long timeout = 15000;
+    bool newDataComming = false;
+    unsigned long _latestGap;
+    long _gapList[20];
+    long _startTime;
+    long _endTime;
+    long _timeout = 15000;
   private:
     void autoPopulateZeroGap();
   public:
@@ -25,5 +25,6 @@ class HorerSensor {
     void addGap(long gap);
     float getAverageRPM();
     float getLatestRPM();
+    long* getAllGaps();
 };
 #endif

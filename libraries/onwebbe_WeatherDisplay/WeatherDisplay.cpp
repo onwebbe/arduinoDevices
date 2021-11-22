@@ -29,7 +29,7 @@ static const unsigned char PROGMEM temperatureIcon[] =
   B00001111, B11100000,
   B00001111, B11100000,
   B00000111, B11000000,
-  B00000001, B10000000
+  B00000011, B10000000
 };
 static const unsigned char PROGMEM lightIcon[] =
 {
@@ -130,15 +130,16 @@ void WeatherDisplay::drawTextImage(const uint8_t *bitmap, uint8_t left, uint8_t 
   _display.drawBitmap(left, top, bitmap, ICON16_GLCD_WIDTH, ICON16_GLCD_HEIGHT, SH110X_WHITE);
 }
 void WeatherDisplay::drawLineOne(float temperature, int humidity) {
-  this->drawTextImage(temperatureIcon, 0, 0);
+  this->drawTextImage(temperatureIcon, 0, 25);
   _display.setTextSize(2);
   _display.setTextColor(SH110X_WHITE);
-  _display.setCursor(16, 0);
+  _display.setCursor(16, 25);
   String temperatureStr = "";
   temperatureStr.concat(temperature);
   char b[5];
   temperatureStr = temperatureStr.substring(0, 5);
   strcpy(b,temperatureStr.c_str());
+  b[4] = ' ';
   _display.write(b);
 
   String humidityStr = "";
@@ -146,14 +147,14 @@ void WeatherDisplay::drawLineOne(float temperature, int humidity) {
   humidityStr.concat("%");
   char c[4];
   strcpy(c,humidityStr.c_str());
-  _display.setCursor(16 * 5, 0);
+  _display.setCursor(16 * 5, 25);
   _display.write(c);
 }
 void WeatherDisplay::drawLineTwo(int light, int wind) {
-  this->drawTextImage(lightIcon, 0, 25);
+  this->drawTextImage(lightIcon, 0, 48);
   _display.setTextSize(2);
   _display.setTextColor(SH110X_WHITE);
-  _display.setCursor(16, 25);
+  _display.setCursor(16, 48);
   String lightStr = "";
   lightStr.concat(light);
   char b[5];
@@ -165,14 +166,14 @@ void WeatherDisplay::drawLineTwo(int light, int wind) {
   windStr.concat(wind);
   char c[4];
   strcpy(c,windStr.c_str());
-  _display.setCursor(16 * 5, 25);
+  _display.setCursor(16 * 5, 48);
   _display.write(c);
 }
 void WeatherDisplay::drawLineThree(int pressure, int rain) {
-  this->drawTextImage(pressureIcon, 0, 48);
+  this->drawTextImage(pressureIcon, 0, 0);
   _display.setTextSize(2);
   _display.setTextColor(SH110X_WHITE);
-  _display.setCursor(16, 48);
+  _display.setCursor(16, 0);
   String pressureStr = "";
   pressureStr.concat(pressure);
   char b[5];
@@ -181,8 +182,8 @@ void WeatherDisplay::drawLineThree(int pressure, int rain) {
   _display.write(b);
   
   if (rain == 0) {
-    this->drawTextImage(sunIcon, 16 * 5, 48);
+    this->drawTextImage(sunIcon, 16 * 5, 0);
   } else {
-    this->drawTextImage(rainIcon, 16 * 5, 48);
+    this->drawTextImage(rainIcon, 16 * 5, 0);
   }
 }
