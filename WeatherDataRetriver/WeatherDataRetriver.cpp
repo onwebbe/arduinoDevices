@@ -56,7 +56,7 @@ String WeatherDataRetriver::getWeatherData() {
   float h = getHumidity();
   float p = getPressure();
   int l = getGY30Data();  
-  int r = isRain();
+  boolean r = isRain();
   float w = getWindSpeed();
   _weatherDisplay->displayData(t, h, l, w, p, r);
   //Print out the Temperature
@@ -68,7 +68,9 @@ String WeatherDataRetriver::getWeatherData() {
   String pstr = String(p, 0);
   String lstr = String(l);
   String wstr = String(w);
-  String rstr = (r == 1 ? "true":"false");
+  Serial.println("r?");
+  Serial.println(r == true ? "true":"false");
+  String rstr = (r == true ? "true":"false");
 //  resultString.concat(tstr);
 //  resultString.concat("|");
 //  resultString.concat(hstr);
@@ -150,7 +152,8 @@ float WeatherDataRetriver::getWindSpeed() {
 }
 boolean WeatherDataRetriver::isRain() {
   int isRainDrop = digitalRead(_rainDropPin);
-  Serial.println("isRain" + isRainDrop);
-  return isRainDrop == 1 ? true: false;
+  Serial.println("isRain:");
+  Serial.println(isRainDrop);
+  return isRainDrop == 1 ? false: true;
   // return 0;
 }

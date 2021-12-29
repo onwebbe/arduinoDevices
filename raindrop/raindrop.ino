@@ -6,6 +6,6 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  Serial.println(digitalRead(17));
+  Serial.println(digitalRead(18));
   delay(2000);
 }

@@ -3,10 +3,19 @@
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
+#include <EspSaveCrash.h>
 
 #include <ESP8266HTTPClient.h>
 
 #include <WiFiClient.h>
+
+#ifndef STASSID
+#define STASSID "pankey_asus"
+#define STAPSK  "1234554321"
+#endif
+
+const char* ssid     = STASSID;
+const char* password = STAPSK;
 
 ESP8266WiFiMulti WiFiMulti;
 
@@ -25,8 +34,24 @@ void setup()   {
     delay(1000);
   }
 
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  /* Explicitly set the ESP8266 to be a WiFi-client, otherwise, it by default,
+     would try to act as both a client and an access-point and could cause
+     network-issues with your other WiFi-devices on your WiFi-network. */
   WiFi.mode(WIFI_STA);
-  WiFiMulti.addAP("pankey_asus", "1234554321");
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
   weatherDisplay.displayWifiInfo();
 }
 
@@ -70,6 +95,8 @@ void loop() {
         }
       } else {
         Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+        
+        ESP.reset();
       }
 
       http.end();
@@ -78,7 +105,7 @@ void loop() {
     }
   }
 
-  delay(2000);
+  delay(5000);
 }
 
 void displayWeather(const char *temperature, const char *humidity, const char *light, const char *pressure, const char *wind, const char *rain) {

@@ -1,5 +1,9 @@
 #include "esp_camera.h"
 #include <WiFi.h>
+#include <WiFiClient.h>
+#include <WebServer.h>
+#include <ESPmDNS.h>
+#include <Arduino.h>
 
 //
 // WARNING!!! PSRAM IC required for UXGA resolution and high JPEG quality
@@ -20,6 +24,8 @@
 
 #include "camera_pins.h"
 
+#define LED_PIN 12
+
 const char* ssid = "pankey_asus";
 const char* password = "1234554321";
 
@@ -28,6 +34,8 @@ void startCameraServer();
 void setup() {
   Serial.begin(115200);
   Serial.setDebugOutput(true);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, HIGH);
   Serial.println();
 
   camera_config_t config;
@@ -93,21 +101,36 @@ void setup() {
 
   WiFi.begin(ssid, password);
 
+  int loopt = 0;
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    loopt = loopt + 1;
+    if (loopt == 30) {
+      esp_restart();
+    }
   }
   Serial.println("");
   Serial.println("WiFi connected");
 
   startCameraServer();
-
+  
+  
   Serial.print("Camera Ready! Use 'http://");
   Serial.print(WiFi.localIP());
   Serial.println("' to connect");
+  
 }
 
+int i = 0;
 void loop() {
   // put your main code here, to run repeatedly:
-  delay(10000);
+  if (i % 2 == 0) {
+    digitalWrite(LED_PIN, LOW);
+  } else {
+    digitalWrite(LED_PIN, HIGH);
+  }
+  Serial.println(i % 2);
+  i = i + 1;
+  delay(2000);
 }
