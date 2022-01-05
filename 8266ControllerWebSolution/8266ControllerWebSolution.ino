@@ -37,21 +37,40 @@
 #include <ESP8266WebServer.h>
 #include <ArduinoJson.h>
 #include "DataDefinitions.h"
+#include <FS.h>
 
 #ifndef APSSID
-#define APSSID "Driver"
-#define APPSK  "1234554321"
+//#define APSSID "Driver"
+//#define APPSK  "1234554321"
+
+#define WEBSOCKET_CLIENT_ROLE_CONTROLLER 1
+#define WEBSOCKET_CLIENT_ROLE_RADAR 2
 #endif
 
 /* Set these to your desired credentials. */
-const char *ssid = APSSID;
-const char *password = APPSK;
+//const char *ssid = APSSID;
+//const char *password = APPSK;
+const char* ssid = "Driver";
+const char* password = "1234554321";
+String js1FileName = "/2.34c64731.chunk.js";
+String js2FileName = "/main.777f5132.chunk.js";
+String js3FileName = "/runtime-main.3c729693.js";
+String cssFileName = "/main.95dcb6cd.chunk.css";
+// nodemcu using 1, 2, 3, 12, 13, 14, 15
+//Servo servo1;
+Servo servo2;
+Servo servo3;
+Servo servo4;
+Servo servo5;
+Servo servo6;
 
 ESP8266WebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
 
 ControllerData controllerData;
 SensorData sensorData;
+unsigned long currentTime = millis();
+
 void initData() {
   controllerData.leftController_UP_DOWN = 0;
   controllerData.leftController_LEFT_RIGHT = 0;
@@ -65,6 +84,7 @@ void initData() {
   sensorData.rotateZ = 0;
   sensorData.distance = 0;
 }
+
 void getAllData() {
   String controllerJSON = controllerData.convertToJSON();
   String sensorJSON = sensorData.convertToJSON();
@@ -80,45 +100,150 @@ void getAllData() {
   serializeJsonPretty(docSensor, resultString);
   server.send(200, "application/json", resultString);
 }
-/* Just a little test message.  Go to http://192.168.4.1 in a web browser
+
+/* Just a little test message.  Go to http://192.168.5.1 in a web browser
    connected to this access point to see it.
 */
-void handleRoot() {
+void handleNotFound() {
   server.send(200, "text/html", "<h1>You are connected</h1>");
 }
+
 void postControllerData() {
   String data = server.arg(0);
   controllerData.getFromJSON(data);
   server.send(200, "text/html", "<h1>updated</h1>");
 }
+
+void getHTML() {
+  File file=SPIFFS.open("/index.html","r");//以只读模式打开index.htm，流模式为text/html。然后关闭该文件
+  server.streamFile(file,"text/html");
+  file.close();
+  // server.send(200, "text/html", getHTMLText());
+}
+void getCss() {
+  File file=SPIFFS.open(cssFileName,"r");//以只读模式打开index.htm，流模式为text/html。然后关闭该文件
+  server.streamFile(file,"text/css");
+  file.close();
+  // server.send(200, "text/css", getCssText());
+}
+void getJS1() {
+  File file=SPIFFS.open(js1FileName,"r");//以只读模式打开index.htm，流模式为text/html。然后关闭该文件
+  server.streamFile(file,"application/javascript");
+  file.close();
+  // server.send(200, "application/javascript", getJS1Text());
+}
+void getJS2() {
+  File file=SPIFFS.open(js2FileName,"r");//以只读模式打开index.htm，流模式为text/html。然后关闭该文件
+  server.streamFile(file,"application/javascript");
+  file.close();
+  // server.send(200, "application/javascript", getJS2Text());
+}
+void getJS3() {
+  File file=SPIFFS.open(js3FileName,"r");//以只读模式打开index.htm，流模式为text/html。然后关闭该文件
+  server.streamFile(file,"application/javascript");
+  file.close();
+  // server.send(200, "application/javascript", getJS3Text());
+}
+void getFavourIcon() {
+  File file=SPIFFS.open("/favicon.ico","r");//以只读模式打开index.htm，流模式为text/html。然后关闭该文件
+  server.streamFile(file,"application/x-ico");
+  file.close();
+  // server.send(200, "application/javascript", getJS3Text());
+}
 void setup() {
-  delay(1000);
   Serial.begin(115200);
-  Serial.println();
+  Serial.println("-");
+  delay(1000);
+  Serial.println("-");
   Serial.print("Configuring access point...");
   /* You can remove the password parameter if you want the AP to be open. */
+  IPAddress local_IP(192,168,5,1);//手动设置的开启的网络的ip地址
+  IPAddress gateway(192,168,5,1);  //手动设置的网关IP地址
+  IPAddress subnet(255,255,255,0); //手动设置的子网掩码
+  //设置为接入点模式
+  WiFi.mode(WIFI_AP);
+
+ //配置接入点的IP，网关IP，子网掩码
+ WiFi.softAPConfig(local_IP, gateway, subnet);
   WiFi.softAP(ssid, password);
 
   IPAddress myIP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
+  Serial.println("AP IP address");
   Serial.println(myIP);
-//  server.on("/", handleRoot);
-//  server.on("/api/v1/flight/getAllData", getAllData);
-//  server.on("/api/v1/flight/postControllerData", postControllerData);
-//  server.begin();
-  webSocket.begin();
+
+  SPIFFS.begin();
+  Serial.println("SPIFFS started");
+
+  String cssF = "/static/css";
+  cssF.concat(cssFileName);
+  String jsF1 = "/static/js";
+  jsF1.concat(js1FileName);
+  String jsF2 = "/static/js";
+  jsF2.concat(js2FileName);
+  String jsF3 = "/static/js";
+  jsF3.concat(js3FileName);
+  
+  server.on(cssF, getCss);
+  server.on(jsF1, getJS1);
+  server.on(jsF2, getJS2);
+  server.on(jsF3, getJS3);
+  
+  server.on("/index.html", getHTML);
+  server.on("/", getHTML);
+  server.on("/favicon.ico", getFavourIcon);
+  server.onNotFound(handleNotFound);
+
   webSocket.onEvent(webSocketEvent);
-  Serial.println("HTTP server started");
+  
+  server.begin();
+  webSocket.begin();
+  
+  Serial.println("HTTP server started at 80");
+  Serial.println("Websocket server started at 81");
   initData();
+  
+  
+//
+//  servo1.attach(1);
+  servo2.attach(2);
+  servo3.attach(3);
+  servo4.attach(12);
+  servo5.attach(13);
+  servo6.attach(14);
+//  servo1.write(90);
+  servo2.write(90);
+  servo3.write(90);
+  servo4.write(90);
+  servo5.write(90);
+  servo6.write(90);
+  Serial.println("Initial Servo Done");
 }
-
+// int clientNum = 0;
 void loop() {
-//  server.handleClient();
+  server.handleClient();
   webSocket.loop();
+  if ((millis() - currentTime) >= 10) {
+    currentTime = millis();
+    if (currentTime >= 0) {
+      // webSocket.sendTXT(clientNum, test2);
+    }
+  }
 }
 
+/*
+ * {
+ *   "command": "setController",
+ *   "clientType": "controller",
+ *   "data": {}
+ * }
+ * 
+ * {
+ *   "command": "getSensorData",
+ *   "clientType": "sensor",
+ *   "data": {}
+ * }
+ */
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
-
     switch(type) {
         case WStype_DISCONNECTED:
             Serial.printf("[%u] Disconnected!\n", num);
@@ -127,19 +252,25 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
             {
                 IPAddress ip = webSocket.remoteIP(num);
                 Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
-        
-        // send message to client
-        webSocket.sendTXT(num, "Connected");
             }
             break;
         case WStype_TEXT:
-            Serial.printf("[%u] get Text: %s\n", num, payload);
-
-            // send message to client
-            // webSocket.sendTXT(num, "message here");
-
-            // send data to all connected clients
-            // webSocket.broadcastTXT("message here");
+            {
+                Serial.printf("[%u] get Text: %s\n", num, payload);
+                StaticJsonDocument<1024> doc;
+                DeserializationError error = deserializeJson(doc, payload);
+                String command = doc["command"];
+                if (command.compareTo("setController") == 0) {
+                  setControllerData(doc["data"]);
+                } else if (command.compareTo("setConfig") == 0) {
+                  setConfigData(doc["data"]);
+                }
+                // send message to client
+                // webSocket.sendTXT(num, "message here");
+    
+                // send data to all connected clients
+                // webSocket.broadcastTXT("message here");
+            }
             break;
         case WStype_BIN:
             Serial.printf("[%u] get binary length: %u\n", num, length);
@@ -149,5 +280,27 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
             // webSocket.sendBIN(num, payload, length);
             break;
     }
-
+}
+void setConfigData(JsonObject data) {
+  Serial.println("setConfigControllerData");
+}
+void setControllerData(JsonObject data) {
+  Serial.println("setControllerData");
+  
+  controllerData.getFromJSONObj(data);
+  Serial.println(controllerData.leftController_UP_DOWN);
+  
+  int leftUD = map(controllerData.leftController_UP_DOWN, 0, 250, 0, 180);
+  int leftLR = map(controllerData.leftController_LEFT_RIGHT, 0, 250, 0, 180);
+  int rightUD = map(controllerData.rightController_UP_DOWN, 0, 250, 0, 180);
+  int rightLR = map(controllerData.rightController_LEFT_RIGHT, 0, 250, 0, 180);
+  int sw1 = map(controllerData.switchA, 0, 100, 0, 180);
+  int sw2 = map(controllerData.switchB, 0, 100, 0, 180);
+  Serial.println(leftUD);
+//  servo1.write(leftUD);
+  servo2.write(sw2);
+  servo3.write(rightUD);
+  servo4.write(rightLR);
+  servo5.write(leftUD);
+  servo6.write(leftLR);
 }

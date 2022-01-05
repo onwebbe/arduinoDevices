@@ -2,6 +2,23 @@
 #include "DataDefinitions.h"
 #include <ArduinoJson.h>
 #include <Arduino.h>
+
+ControllerData::ControllerData() {
+  leftController_UP_DOWN_Rate = 1;
+  leftController_LEFT_RIGHT_Rate = 1;
+  rightController_UP_DOWN_Rate = 1;
+  rightController_LEFT_RIGHT_Rate = 1;
+  switchA_Rate = 1;
+  switchB_Rate = 1;
+}
+void ControllerData::getConfigFromJSONObj(JsonObject data) {
+  leftController_UP_DOWN_Rate = data["left_UD_C"];
+  leftController_LEFT_RIGHT_Rate = data["left_LR_C"];
+  rightController_UP_DOWN_Rate = data["right_UD_C"];
+  rightController_LEFT_RIGHT_Rate = data["right_LR_C"];
+  switchA_Rate = data["A_C"];
+  switchB_Rate = data["B_C"];
+}
 String ControllerData::convertToJSON() {
   StaticJsonDocument<200> doc;
   JsonObject data = doc.createNestedObject("controllerData");
@@ -36,7 +53,15 @@ void ControllerData::getFromJSON(String json) {
   switchB = controllerData["B"];
 }
 
-
+void ControllerData::getFromJSONObj(JsonObject json) {
+  const JsonObject controllerData = json["controllerData"];
+  leftController_UP_DOWN = controllerData["left_UD"];
+  leftController_LEFT_RIGHT = controllerData["left_LR"];
+  rightController_UP_DOWN = controllerData["right_UD"];
+  rightController_LEFT_RIGHT = controllerData["right_LR"];
+  switchA = controllerData["A"];
+  switchB = controllerData["B"];
+}
 String SensorData::convertToJSON() {
   StaticJsonDocument<200> doc;
   JsonObject data = doc.createNestedObject("sensorData");

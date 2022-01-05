@@ -54,23 +54,23 @@ void setup(void) {
   delay(1000);
 
   Serial.begin(115200);
-//  WiFi.softAP(ssid, password);
-//  IPAddress myIP = WiFi.softAPIP();
-//  Serial.println(myIP);
+  WiFi.softAP(ssid, password);
+  IPAddress myIP = WiFi.softAPIP();
+  Serial.println(myIP);
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  Serial.println("");
-  // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
+//  WiFi.mode(WIFI_STA);
+//  WiFi.begin(ssid, password);
+//  Serial.println("");
+//  // Wait for connection
+//  while (WiFi.status() != WL_CONNECTED) {
+//    delay(500);
+//    Serial.print(".");
+//  }
+//  Serial.println("");
+//  Serial.print("Connected to ");
+//  Serial.println(ssid);
+//  Serial.print("IP address: ");
+//  Serial.println(WiFi.localIP());
 
 
 //
@@ -136,8 +136,8 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
                 IPAddress ip = webSocket.remoteIP(num);
                 Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
         
-        // send message to client
-        webSocket.sendTXT(num, "Connected");
+                // send message to client
+                webSocket.sendTXT(num, "Connected");
             }
             break;
         case WStype_TEXT:
