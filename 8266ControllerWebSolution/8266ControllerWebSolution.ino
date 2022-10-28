@@ -53,11 +53,11 @@
 const char* ssid = "Driver";
 const char* password = "1234554321";
 String js1FileName = "/2.34c64731.chunk.js";
-String js2FileName = "/main.777f5132.chunk.js";
+String js2FileName = "/main.7f396308.chunk.js";
 String js3FileName = "/runtime-main.3c729693.js";
 String cssFileName = "/main.95dcb6cd.chunk.css";
 // nodemcu using 1, 2, 3, 12, 13, 14, 15
-//Servo servo1;
+Servo servo1;
 Servo servo2;
 Servo servo3;
 Servo servo4;
@@ -70,6 +70,7 @@ WebSocketsServer webSocket = WebSocketsServer(81);
 ControllerData controllerData;
 SensorData sensorData;
 unsigned long currentTime = millis();
+unsigned long heartBeatTime = millis();
 
 void initData() {
   controllerData.leftController_UP_DOWN = 0;
@@ -204,13 +205,13 @@ void setup() {
   
   
 //
-//  servo1.attach(1);
+  servo1.attach(0);
   servo2.attach(2);
-  servo3.attach(3);
+  servo3.attach(13);
   servo4.attach(12);
-  servo5.attach(13);
+  servo5.attach(3);
   servo6.attach(14);
-//  servo1.write(90);
+  servo1.write(90);
   servo2.write(90);
   servo3.write(90);
   servo4.write(90);
@@ -227,6 +228,10 @@ void loop() {
     if (currentTime >= 0) {
       // webSocket.sendTXT(clientNum, test2);
     }
+  }
+  if (millis() - heartBeatTime > 500) {
+     servo1.write(0);
+     // Serial.println("!!!!!!!!!!!!!!!!!!!! Lost Connection !!!!!!!!!!!!!!!!!!!!");
   }
 }
 
@@ -247,6 +252,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
     switch(type) {
         case WStype_DISCONNECTED:
             Serial.printf("[%u] Disconnected!\n", num);
+            servo1.write(0);
             break;
         case WStype_CONNECTED:
             {
@@ -256,14 +262,28 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
             break;
         case WStype_TEXT:
             {
-                Serial.printf("[%u] get Text: %s\n", num, payload);
-                StaticJsonDocument<1024> doc;
+                // Serial.printf("[%u] get Text: %s\n", num, payload);
+                Serial.printf("%s\n", payload);
+                StaticJsonDocument<500> doc;
+                // DynamicJsonDocument doc(2048);
                 DeserializationError error = deserializeJson(doc, payload);
-                String command = doc["command"];
+                if (error) {
+                  Serial.print(F("deserializeJson() failed: "));
+                  Serial.println(error.f_str());
+                  return;
+                }
+                JsonObject jsonObj = doc.as<JsonObject>();
+                String command = jsonObj["command"];
                 if (command.compareTo("setController") == 0) {
-                  setControllerData(doc["data"]);
+                  if (millis() - heartBeatTime > 500) {
+                     servo1.write(0);
+                     // Serial.println("!!!!!!!!!!!!!!!!!!!! Lost Connection !!!!!!!!!!!!!!!!!!!!");
+                  } else {
+                    setControllerData(jsonObj["data"]);
+                  }
+                  heartBeatTime = millis();
                 } else if (command.compareTo("setConfig") == 0) {
-                  setConfigData(doc["data"]);
+                  setConfigData(jsonObj["data"]);
                 }
                 // send message to client
                 // webSocket.sendTXT(num, "message here");
@@ -285,22 +305,21 @@ void setConfigData(JsonObject data) {
   Serial.println("setConfigControllerData");
 }
 void setControllerData(JsonObject data) {
-  Serial.println("setControllerData");
+//  Serial.println("setControllerData");
   
   controllerData.getFromJSONObj(data);
-  Serial.println(controllerData.leftController_UP_DOWN);
   
+// Serial.printf("UD: %d LR: %d strength: %d left: %d right: %d", rightUD, rightLR, rightStrength, leftValue, rightValue);
   int leftUD = map(controllerData.leftController_UP_DOWN, 0, 250, 0, 180);
   int leftLR = map(controllerData.leftController_LEFT_RIGHT, 0, 250, 0, 180);
   int rightUD = map(controllerData.rightController_UP_DOWN, 0, 250, 0, 180);
   int rightLR = map(controllerData.rightController_LEFT_RIGHT, 0, 250, 0, 180);
   int sw1 = map(controllerData.switchA, 0, 100, 0, 180);
   int sw2 = map(controllerData.switchB, 0, 100, 0, 180);
-  Serial.println(leftUD);
-//  servo1.write(leftUD);
-  servo2.write(sw2);
+  servo1.write(leftUD);
+  servo2.write(leftLR);
   servo3.write(rightUD);
   servo4.write(rightLR);
-  servo5.write(leftUD);
-  servo6.write(leftLR);
+  servo5.write(sw1);
+  servo6.write(sw2);
 }

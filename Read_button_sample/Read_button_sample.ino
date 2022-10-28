@@ -1,4 +1,4 @@
-#define READ_PIN 6
+#define READ_PIN D6
 void setup() {
   // put your setup code here, to run once:
   // initialize serial communication at 9600 bits per second:

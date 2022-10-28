@@ -54,13 +54,17 @@ void ControllerData::getFromJSON(String json) {
 }
 
 void ControllerData::getFromJSONObj(JsonObject json) {
-  const JsonObject controllerData = json["controllerData"];
+  JsonObject controllerData = json["controllerData"];
   leftController_UP_DOWN = controllerData["left_UD"];
   leftController_LEFT_RIGHT = controllerData["left_LR"];
   rightController_UP_DOWN = controllerData["right_UD"];
   rightController_LEFT_RIGHT = controllerData["right_LR"];
   switchA = controllerData["A"];
   switchB = controllerData["B"];
+//  for (JsonPair kv : controllerData) {
+//    Serial.println(kv.key().c_str());
+//    Serial.println(kv.value().as<double>());
+//  }
 }
 String SensorData::convertToJSON() {
   StaticJsonDocument<200> doc;
