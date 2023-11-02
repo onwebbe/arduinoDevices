@@ -1,4 +1,4 @@
-#define SWITCH_PIN 4
+#define SWITCH_PIN 14
 void setup() {
   Serial.begin(9600);
   // put your setup code here, to run once:

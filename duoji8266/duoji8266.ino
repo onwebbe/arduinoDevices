@@ -3,7 +3,7 @@
 Servo servo;
 
 void setup() {
-    servo.attach(D1);
+    servo.attach(4);
     servo.write(0);
     delay(2000);
 }

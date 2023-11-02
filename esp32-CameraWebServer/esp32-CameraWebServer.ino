@@ -4,7 +4,7 @@
 #include <WebServer.h>
 #include <ESPmDNS.h>
 #include <Arduino.h>
-
+#include "PCF8575.h"
 //
 // WARNING!!! PSRAM IC required for UXGA resolution and high JPEG quality
 //            Ensure ESP32 Wrover Module or other board with PSRAM is selected
@@ -28,6 +28,8 @@
 
 const char* ssid = "pankey_asus";
 const char* password = "1234554321";
+// Set i2c address
+PCF8575 pcf8575(0x20);
 
 void startCameraServer();
 
@@ -37,7 +39,10 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, HIGH);
   Serial.println();
-
+  pcf8575.pinMode(1, OUTPUT);
+  pcf8575.begin();
+  pcf8575.pinMode(1, OUTPUT);
+  Serial.println("pcf8575 begin");
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
   config.ledc_timer = LEDC_TIMER_0;
@@ -127,8 +132,10 @@ void loop() {
   // put your main code here, to run repeatedly:
   if (i % 2 == 0) {
     digitalWrite(LED_PIN, LOW);
+    pcf8575.digitalWrite(1, LOW);
   } else {
     digitalWrite(LED_PIN, HIGH);
+    pcf8575.digitalWrite(1, HIGH);
   }
   Serial.println(i % 2);
   i = i + 1;

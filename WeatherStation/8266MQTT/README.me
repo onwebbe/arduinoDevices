@@ -1,0 +1,34 @@
+#Pre-Requirement
+## server requirements
+Any MQTT Server required for data
+
+## platform and hardware
+1. 8266 - The micro Controller of the whole stations system
+2. HorerSensor - For Wind Speed
+    Digital GPIO required and module runs under 5V
+3. AHT-10 - for temperature and humidity
+    i2c interface and runs under 3.3V. AHT10_ADDR = 0x38;
+4. BMP-180 - for Pressure
+    i2c interface and runs under 3.3V. ADDR defined under pre installed package "Adafruit_BMP085";
+5. GY30 - for light LX
+    i2c interface and runs under 3.3V. GY30_ADDR = 0b0100011;
+6. Analogic to Digital - for check is rain
+    Digital GPIO required and module runs under 3.3V (better could run under 5V).
+
+## Pre Installed Modules
+1. 8266 model need to be imported
+    it will include ESP8266Wifi.h
+2. OneButton by Matthais Hertel
+    For button click of network reeset
+3. Adafruit_BMP085 by Adafruit
+    For BMP180 Pressure sensor
+4. PubSubClient by Nick O'Leary
+    For MQTT connection and message system
+5. WifiManageer by tablatronix
+    To manager wifi config by customer
+6. LinkedList by Ivan Seidel
+    To store linked list used by Horer senor
+
+## board
+嘉立创EDA used for board
+And board file please check Boards project
