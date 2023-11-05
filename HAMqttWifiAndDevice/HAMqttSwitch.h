@@ -20,16 +20,13 @@ class HAMqttSwitch : public HAMqttDeviceBase {
     void setup();
     void doSubscribe();
     void callback(String topicString, String payloadString);
-    void publishSwitchStatus();
     void beforeReconnect();
     void afterRconnected();
-    // void publishDiscover();
     void loop();
+    
+  public:
+    void publishSwitchStatus();
     void setDelaySwichOff(int delayMillis);
 
-  public:
-    int ERROR = 1;
-    int INFO = 2;
-    int DEBUG = 3;
 };
 #endif

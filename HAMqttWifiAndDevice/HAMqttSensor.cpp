@@ -44,12 +44,6 @@ void HAMqttSensor::callback(String topicString, String payloadString) {
   }
 }
 
-void HAMqttSensor::publishSensorStatus() {
-  _client->publish(_deviceSensorStatusChannel_to_server.c_str(), 0);
-  Serial.print("Publish status-sensor:");
-  Serial.println(0);
-  log(INFO, "Publish status-sensor:" + 0);
-}
 
 void HAMqttSensor::beforeReconnect() {
   log(ERROR, "[Disconnected] beforeDisconnect");
@@ -58,7 +52,7 @@ void HAMqttSensor::beforeReconnect() {
 
 void HAMqttSensor::afterRconnected() {
   Serial.print("[Disconnected] afterReconnect");
-  publishSensorStatus();
+  publishData();
 }
 
 void HAMqttSensor::publishDiscover() {

@@ -31,11 +31,12 @@ class HAMqttSensor : public HAMqttDeviceBase {
     void setup();
     void doSubscribe();
     void callback(String topicString, String payloadString);
-    void publishSensorStatus();
     void beforeReconnect();
     void afterRconnected();
     void publishDiscover();
     void loop();
+    
+  public:
     void addSensorConfig(HAMqttSensorConfig* configData);
     void publishData();
 };
