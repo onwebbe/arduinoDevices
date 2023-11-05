@@ -29,9 +29,10 @@
 // Hardware configuration
 //
 
-// Set up nRF24L01 radio on SPI bus plus pins 7 & 8
-
-RF24 radio(7, 8);
+#define CE_PIN 7
+#define CSN_PIN 8
+// instantiate an object for the nRF24L01 transceiver
+RF24 radio(CE_PIN, CSN_PIN);
 
 //
 // Channel info
@@ -44,8 +45,7 @@ uint8_t values[num_channels];
 // Setup
 //
 
-void setup(void)
-{
+void setup(void) {
   //
   // Print preamble
   //
@@ -69,15 +69,13 @@ void setup(void)
   //delay(1000);
   // Print out header, high then low digit
   int i = 0;
-  while ( i < num_channels )
-  {
+  while (i < num_channels) {
     Serial.print(i >> 4, HEX);
     ++i;
   }
   Serial.println();
   i = 0;
-  while ( i < num_channels )
-  {
+  while (i < num_channels) {
     Serial.print(i & 0xf, HEX);
     ++i;
   }
@@ -92,8 +90,7 @@ void setup(void)
 const int num_reps = 100;
 bool constCarrierMode = 0;
 
-void loop(void)
-{
+void loop(void) {
   /****************************************/
   // Send g over Serial to begin CCW output
   // Configure the channel and power level below
@@ -119,11 +116,9 @@ void loop(void)
 
     // Scan all channels num_reps times
     int rep_counter = num_reps;
-    while (rep_counter--)
-    {
+    while (rep_counter--) {
       int i = num_channels;
-      while (i--)
-      {
+      while (i--) {
         // Select this channel
         radio.setChannel(i);
 
@@ -133,7 +128,7 @@ void loop(void)
         radio.stopListening();
 
         // Did we get a carrier?
-        if ( radio.testCarrier() ) {
+        if (radio.testCarrier()) {
           ++values[i];
         }
       }
@@ -142,8 +137,7 @@ void loop(void)
 
     // Print out channel measurements, clamped to a single hex digit
     int i = 0;
-    while ( i < num_channels )
-    {
+    while (i < num_channels) {
       if (values[i])
         Serial.print(min(0xf, values[i]), HEX);
       else
@@ -153,5 +147,5 @@ void loop(void)
     }
     Serial.println();
 
-  }//If constCarrierMode == 0
+  }  //If constCarrierMode == 0
 }

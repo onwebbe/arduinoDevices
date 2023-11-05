@@ -112,7 +112,7 @@ int readX(int pin) {
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   while(!Serial);
 
   digitalWrite(RESET_PIN, HIGH);
@@ -130,7 +130,7 @@ void setup()
   si4735.setFM(8400, 10800, 10390, 10);
   delay(500);
   currentFrequency = previousFrequency = si4735.getFrequency();
-  si4735.setVolume(45);
+  si4735.setVolume(55);
   showStatus();
 }
 

@@ -305,11 +305,11 @@ SI4735 si4735;
 
 // TFT 3.5" MCUFRIEND
 // My First TFT
-// const int XP = 7, XM = A1, YP = A2, YM = 6; //320x480 ID=0x6814
-// const int TS_LEFT = 149, TS_RT = 846, TS_TOP = 120, TS_BOT = 918;
+const int XP = 7, XM = A1, YP = A2, YM = 6; //320x480 ID=0x6814
+const int TS_LEFT = 149, TS_RT = 846, TS_TOP = 120, TS_BOT = 918;
 // My Second TFT
-const int XP=6,XM=A2,YP=A1,YM=7; //320x480 ID=0x9486
-const int TS_LEFT=891,TS_RT=173,TS_TOP=913,TS_BOT=88;
+// const int XP=6,XM=A2,YP=A1,YM=7; //320x480 ID=0x9486
+// const int TS_LEFT=891,TS_RT=173,TS_TOP=913,TS_BOT=88;
 
 
 
@@ -1106,14 +1106,14 @@ void checkRDS()
   si4735.getRdsStatus();
   if (si4735.getRdsReceived())
   {
-    if (si4735.getRdsSync() && si4735.getRdsSyncFound())
+    if (si4735.getRdsSync() && si4735.getNumRdsFifoUsed() > 0 )
     {
-      rdsMsg = si4735.getRdsText2A();
-      stationName = si4735.getRdsText0A();
+      rdsMsg = si4735.getRdsProgramInformation();
+      stationName = si4735.getRdsStationName();
       rdsTime = si4735.getRdsTime();
       if (rdsMsg != NULL)
         showRDSMsg();
-      if (stationName != NULL)
+      if (stationName != NULL) 
         showRDSStation();
       if (rdsTime != NULL)
         showRDSTime();
@@ -1205,9 +1205,9 @@ void useBand()
     // si4735.setSeekFmSpacing(10); // frequency spacing for FM seek (5, 10 or 20. They mean 50, 100 or 200 kHz)
     // si4735.setSeekAmRssiThreshold(0);
     // si4735.setSeekFmSNRThreshold(3);
-
     cmdBFO = ssbLoaded = false;
-    si4735.setRdsConfig(1, 2, 2, 2, 2);
+    si4735.setRdsConfig(3, 3, 3, 3, 3);
+    si4735.setFifoCount(1);
   }
   else
   {

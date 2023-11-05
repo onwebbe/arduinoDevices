@@ -15,7 +15,13 @@
 
 Library to use i2c analog IC with arduino and esp8266. Can read and write digital value with only 2 wire (perfect for ESP-01).
 
-06/04/2022: v1.0.3 Fix package size
+ - 10/07/2023: v1.1.1 Add support for Arduino UNO R4
+ - 16/02/2023: v1.1.0 
+    - Fix STM32 support and add support for Raspberry Pi Pico and other rp2040 boards
+    - Add support for custom SERCOM interface of Arduino SAMD devices. Force SDA SCL to use GPIO numeration for STM32 bug (https://www.mischianti.org/forums/topic/compatible-with-stm32duino/). 
+    - Force SDA SCL to use GPIO numeration (https://www.mischianti.org/forums/topic/cannot-set-sda-clk-on-esp8266/).
+    - Fix the SDA SCL type #58 and add basic support for SAMD device.
+ - 06/04/2022: v1.0.3 Fix package size
 
 Tutorial: 
 
@@ -122,6 +128,6 @@ void keyPressedOnPCF8575(){
 ```
 
 For the examples I use this wire schema on breadboard:
-![Breadboard](https://github.com/xreef/PCF8575_library/raw/master/resources/testReadWriteLedButton_bb.png)
+![Breadboard](https://www.mischianti.org/wp-content/uploads/2019/07/Arduino-pcf8575-module-wiring-schema-button-led.jpg)
 
 [![Test pcf8575](https://img.youtube.com/vi/jWeHzBLeN6s/0.jpg)](https://youtu.be/jWeHzBLeN6s "Test pcf8575")

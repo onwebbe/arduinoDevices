@@ -1,5 +1,7 @@
 # Optimized High Speed Driver for nRF24L01(+) 2.4GHz Wireless Transceiver
 
+@tableofcontents
+
 ## Design Goals
 
 This library fork is designed to be...
@@ -59,9 +61,7 @@ changes.
 
 Observe
 
-![
-    @image html pinout.jpg
-    ](https://github.com/nRF24/RF24/blob/master/images/pinout.jpg)
+![@image HTML pinout.jpg](https://github.com/nRF24/RF24/raw/master/images/pinout.jpg)
 
 The table below shows how to connect the the pins of the NRF24L01(+) to different boards.
 CE and CSN are configurable.

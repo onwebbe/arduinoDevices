@@ -1,19 +1,19 @@
 /**
- * @brief SI4735 ARDUINO LIBRARY  
- * 
- * @details This is an Arduino library for the SI473X and SI474X, BROADCAST AM/FM/SW RADIO RECEIVER, IC from Silicon Labs for the 
- * @details Arduino development environment 
+ * @brief SI4735 ARDUINO LIBRARY
+ *
+ * @details This is an Arduino library for the SI473X and SI474X, BROADCAST AM/FM/SW RADIO RECEIVER, IC from Silicon Labs for the
+ * @details Arduino development environment
  * @details The communication used by this library is I2C.
  * @details This file contains: const (#define), Defined Data type and Methods declarations
  * @details You can see a complete documentation on <https://github.com/pu2clr/SI4735>
  * @details The are more than 30 examples on <https://github.com/pu2clr/SI4735/tree/master/examples>
- *   
+ *
  * @see [General Documentation](https://pu2clr.github.io/SI4735/)
  * @see [Schematics](https://pu2clr.github.io/SI4735/extras/schematic/)
  * @see Si47XX PROGRAMMING GUIDE AN332 (Rev 1.0): https://www.silabs.com/documents/public/application-notes/AN332.pdf
  * @see AN332 REV 0.8 UNIVERSAL PROGRAMMING GUIDE; AMENDMENT FOR SI4735-D60 SSB AND NBFM PATCHES
- * 
- * @author PU2CLR - Ricardo Lima Caratti 
+ *
+ * @author PU2CLR - Ricardo Lima Caratti
  * @date  2019-2022
  */
 
@@ -79,14 +79,12 @@
 #define FM_SEEK_TUNE_SNR_THRESHOLD 0x1403  // Sets the SNR threshold for a valid FM Seek/Tune
 #define FM_SEEK_TUNE_RSSI_THRESHOLD 0x1404 // Sets the RSSI threshold for a valid FM Seek/Tune
 
-
 // NBFM Commands
 #define NBFM_TUNE_FREQ 0x50
 #define NBFM_TUNE_STATUS 0x52
 #define NBFM_RSQ_STATUS 0x53
 #define NBFM_AGC_STATUS 0x57
 #define NBFM_AGC_OVERRIDE 0x58
-
 
 // NBFM Properties
 
@@ -99,7 +97,6 @@
 #define NBFM_VALID_SNR_THRESHOLD 0x5403
 #define NBFM_VALID_RSSI_THRESHOLD 0x5404
 
-
 // AM command
 #define AM_TUNE_FREQ 0x40    // Tunes to a given AM frequency.
 #define AM_SEEK_START 0x41   // Begins searching for a valid AM frequency.
@@ -110,8 +107,8 @@
 #define GPIO_CTL 0x80        // Configures GPO1, 2, and 3 as output or Hi-Z.
 #define GPIO_SET 0x81        // Sets GPO1, 2, and 3 output level (low or high).
 
-//SSB command (SAME AM CMD VALUES)
-// See AN332 REV 0.8 UNIVERSAL PROGRAMMING GUIDE; pages 4 and 5
+// SSB command (SAME AM CMD VALUES)
+//  See AN332 REV 0.8 UNIVERSAL PROGRAMMING GUIDE; pages 4 and 5
 #define SSB_TUNE_FREQ 0x40    // Tunes to a given SSB frequency.
 #define SSB_TUNE_STATUS 0x42  // Queries the status of the already issued SSB_TUNE_FREQ or AM_SEEK_START command.
 #define SSB_RSQ_STATUS 0x43   // Queries the status of the Received Signal Quality (RSQ) for the current channel.
@@ -120,17 +117,13 @@
 
 // AM/SW/LW Receiver Property Summary
 // See  Si47XX PROGRAMMING GUIDE AN332 (REV 1.0); page 125
-#define DIGITAL_OUTPUT_FORMAT 0x0102                // Configure digital audio outputs.            
-#define DIGITAL_OUTPUT_SAMPLE_RATE 0x0104           // Configure digital audio output sample rate
-#define REFCLK_FREQ 0x0201                          //Sets frequency of reference clock in Hz. The range is 31130 to 34406 Hz, or 0 to disable the AFC. Default is 32768 Hz.
-#define REFCLK_PRESCALE 0x0202                      // Sets the prescaler value for RCLK input.
 #define AM_DEEMPHASIS 0x3100                        // Sets deemphasis time constant. Can be set to 50 μs. Deemphasis is disabled by default.
 #define AM_CHANNEL_FILTER 0x3102                    // Selects the bandwidth of the channel filter for AM reception. The choices are 6, 4, 3, 2, 2.5, 1.8, or 1 (kHz). The default bandwidth is 2 kHz.
 #define AM_AUTOMATIC_VOLUME_CONTROL_MAX_GAIN 0x3103 // Sets the maximum gain for automatic volume control.
 #define AM_MODE_AFC_SW_PULL_IN_RANGE 0x3104         // Sets the SW AFC pull-in range.
 #define AM_MODE_AFC_SW_LOCK_IN_RANGE 0x3105         // Sets the SW AFC lock-in.
 #define AM_RSQ_INTERRUPTS 0x3200                    // Same SSB - Configures interrupt related to Received Signal Quality metrics. All interrupts are disabled by default.
-#define AM_RSQ_SNR_HIGH_THRESHOLD 0x3201            //Sets high threshold for SNR interrupt.
+#define AM_RSQ_SNR_HIGH_THRESHOLD 0x3201            // Sets high threshold for SNR interrupt.
 #define AM_RSQ_SNR_LOW_THRESHOLD 0x3202             // Sets low threshold for SNR interrupt.
 #define AM_RSQ_RSSI_HIGH_THRESHOLD 0x3203           // Sets high threshold for RSSI interrupt.
 #define AM_RSQ_RSSI_LOW_THRESHOLD 0x3204            // Sets low threshold for RSSI interrupt.
@@ -186,10 +179,16 @@
 
 // Parameters
 #define SI473X_RDS_OUTPUT_ONLY 0b00000000      // RDS output only (no audio outputs) Si4749 only
-#define SI473X_ANALOG_AUDIO 0b00000101         // Analog Audio Inputs
+#define SI473X_ANALOG_AUDIO 0b00000101         // Analog Audio output
 #define SI473X_DIGITAL_AUDIO1 0b00001011       // Digital audio output (DCLK, LOUT/DFS, ROUT/DIO)
-#define SI473X_DIGITAL_AUDIO2 0b10110000       // Digital audio outputs (DCLK, DFS, DIO)
+#define SI473X_DIGITAL_AUDIO2 0b10110000       // Digital audio output (DCLK, DFS, DIO)
 #define SI473X_ANALOG_DIGITAL_AUDIO 0b10110101 // Analog and digital audio outputs (LOUT/ROUT and DCLK, DFS,DIO)
+
+// Digital and Occilator parameters for AM and FM modes See AN332 REV 0.8 UNIVERSAL PROGRAMMING GUIDE - pages 56, 87, 125, 148, 150, 175, 208, 221, 243,
+#define DIGITAL_OUTPUT_FORMAT 0x0102      // Configure digital audio outputs.
+#define DIGITAL_OUTPUT_SAMPLE_RATE 0x0104 // Configure digital audio output sample rate
+#define REFCLK_FREQ 0x0201                // Sets frequency of reference clock in Hz. The range is 31130 to 34406 Hz, or 0 to disable the AFC. Default is 32768 Hz.
+#define REFCLK_PRESCALE 0x0202            // Sets the prescaler value for RCLK input.
 
 // Other parameters
 #define FM_CURRENT_MODE 0
@@ -205,34 +204,34 @@
 #define MIN_DELAY_WAIT_SEND_LOOP 300     // In uS (Microsecond) - each loop of waitToSend sould wait this value in microsecond
 #define MAX_SEEK_TIME 8000               // defines the maximum seeking time 8s is default.
 
-#define DEFAULT_CURRENT_AVC_AM_MAX_GAIN 36 
+#define DEFAULT_CURRENT_AVC_AM_MAX_GAIN 36
 
 #define XOSCEN_CRYSTAL 1 // Use crystal oscillator
 #define XOSCEN_RCLK 0    // Use external RCLK (crystal oscillator disabled).
 
-/** @defgroup group01 Union, Struct and Defined Data Types 
- * @section group01 Data Types 
- *  
+/** @defgroup group01 Union, Struct and Defined Data Types
+ * @section group01 Data Types
+ *
  * @brief SI473X data representation
- * 
- * @details The goal of this approach is separating data from code. 
- * The Si47XX family works with many internal data that can be represented by data structure 
- * or defined data type in C/C++. These C/C++ resources have been used widely here.  
- * This approach made the library easier to build and maintain.  Each data structure created 
- * here has its reference (name of the document and page on which it was based). 
- * In other words, to make the SI47XX device easier to deal, some defined data types were 
+ *
+ * @details The goal of this approach is separating data from code.
+ * The Si47XX family works with many internal data that can be represented by data structure
+ * or defined data type in C/C++. These C/C++ resources have been used widely here.
+ * This approach made the library easier to build and maintain.  Each data structure created
+ * here has its reference (name of the document and page on which it was based).
+ * In other words, to make the SI47XX device easier to deal, some defined data types were
  * created to handle byte and bits to process  commands, properties and responses.
- * These data types will be usefull to deal with SI473X 
+ * These data types will be usefull to deal with SI473X
  */
 
 /**
  * @ingroup group01
- * 
- * @brief Power Up arguments data type 
- * 
+ *
+ * @brief Power Up arguments data type
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 64 and 65
  */
-    typedef union
+typedef union
 {
     struct
     {
@@ -250,11 +249,11 @@
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Data type for Enables output for GPO1, GPO2 and GPO3
- * 
- * @details GPO1, 2, and 3 can be configured for output (Hi-Z or active drive) by setting the GPO1OEN, GPO2OEN, and GPO3OEN bit. 
- * 
+ *
+ * @details GPO1, 2, and 3 can be configured for output (Hi-Z or active drive) by setting the GPO1OEN, GPO2OEN, and GPO3OEN bit.
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 82 and 144
  */
 typedef union
@@ -272,11 +271,11 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Data type for Configuring the sources for the GPO2/INT interrupt pin
- * 
+ *
  * @details Valid sources are the lower 8 bits of the STATUS byte, including CTS, ERR, RSQINT, and STCINT bits.
- * 
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 146
  */
 typedef union
@@ -299,9 +298,9 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Represents how the  frequency is stored in the si4735.
- * @details It helps to convert frequency in uint16_t to two bytes (uint8_t) (FREQL and FREQH)  
+ * @details It helps to convert frequency in uint16_t to two bytes (uint8_t) (FREQL and FREQH)
  */
 typedef union
 {
@@ -315,7 +314,7 @@ typedef union
 
 /**
  * @ingroup group01
- * @brief Antenna Tuning Capacitor data type manupulation 
+ * @brief Antenna Tuning Capacitor data type manupulation
  */
 typedef union
 {
@@ -329,9 +328,9 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief AM Tune frequency data type command (AM_TUNE_FREQ command)
- * 
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 135
  */
 typedef union
@@ -350,14 +349,14 @@ typedef union
     uint8_t raw[5];
 } si47x_set_frequency;
 
-/** 
- * @ingroup group01 
- * 
+/**
+ * @ingroup group01
+ *
  * @brief Seek frequency (automatic tuning). ARG1
- * 
+ *
  * @details Represents searching for a valid frequency data type AM and FM.
  * @details When AM, the searching data have to be complemented by si47x_seek_am_complement.
- * 
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 72 and 137
  * @see si47x_seek_am_complement
  */
@@ -373,13 +372,13 @@ typedef union
     uint8_t raw;
 } si47x_seek;
 
-/** 
- * @ingroup group01 
- * 
+/**
+ * @ingroup group01
+ *
  * @brief Seek frequency (automatic tuning) AM complement (ARG2, ARG3, ARG4 and ARG5)
- * 
+ *
  * @details Represents AM complement searching information for a valid frequency data type.
- * 
+ *
  * @see  @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 72 and 137
  */
 typedef struct
@@ -390,11 +389,11 @@ typedef struct
     uint8_t ANTCAPL;
 } si47x_seek_am_complement;
 
-/** 
+/**
  * @ingroup group01 status response structure
- * 
+ *
  * @brief Status response data representation
- * 
+ *
  * @details Represents searching for a valid frequency data type.
  */
 typedef union
@@ -412,14 +411,14 @@ typedef union
     uint8_t raw;
 } si47x_status;
 
-/**  
+/**
  * @ingroup group01
- * 
- * @brief Response status command 
- * 
+ *
+ * @brief Response status command
+ *
  * @details Response data from a query status command
- * 
- * @see Si47XX PROGRAMMING GUIDE; pages 73 and 
+ *
+ * @see Si47XX PROGRAMMING GUIDE; pages 73 and
  */
 typedef union
 {
@@ -456,12 +455,12 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Data representation for  Firmware Information (GET_REV)
- * 
- * @details The part number, chip revision, firmware revision, patch revision and component revision numbers. 
- * 
- * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 66 and 131 
+ *
+ * @details The part number, chip revision, firmware revision, patch revision and component revision numbers.
+ *
+ * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 66 and 131
  */
 typedef union
 {
@@ -490,15 +489,15 @@ typedef union
 
 /**
  * @ingroup group01
- * 
- * @brief Firmware Query Library ID response. 
- * 
+ *
+ * @brief Firmware Query Library ID response.
+ *
  * @details Used to represent the response of a power up command with FUNC = 15 (patch)
- * 
- * To confirm that the patch is compatible with the internal device library revision, the library 
+ *
+ * To confirm that the patch is compatible with the internal device library revision, the library
  * revision should be confirmed by issuing the POWER_UP command with Function = 15 (query library ID)
- * 
- * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 12 
+ *
+ * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 12
  */
 typedef union
 {
@@ -526,11 +525,11 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Seek station status
- * 
+ *
  * @details Status of FM_TUNE_FREQ or FM_SEEK_START commands or Status of AM_TUNE_FREQ or AM_SEEK_START commands.
- * 
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 73 and 139
  */
 typedef union
@@ -546,9 +545,9 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Data type to deal with SET_PROPERTY command
- * 
+ *
  * @details Property Data type (help to deal with SET_PROPERTY command on si473X)
  */
 typedef union
@@ -561,14 +560,14 @@ typedef union
     uint16_t value;
 } si47x_property;
 
-/** 
+/**
  * @ingroup group01
- * 
- * @brief  Radio Signal Quality data representation 
- * 
+ *
+ * @brief  Radio Signal Quality data representation
+ *
  * @details Data type for status information about the received signal quality (FM_RSQ_STATUS and AM_RSQ_STATUS)
- * 
- * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 75 and 
+ *
+ * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 75 and
  */
 typedef union
 {
@@ -626,10 +625,10 @@ typedef union
 
 /**
  * @ingroup group01
- * 
- * @brief Data type for RDS Status command and response information 
  *
- * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 77 and 78 
+ * @brief Data type for RDS Status command and response information
+ *
+ * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 77 and 78
  * @see Also https://en.wikipedia.org/wiki/Radio_Data_System
  */
 typedef union
@@ -646,9 +645,9 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Response data type for current channel and reads an entry from the RDS FIFO.
- * 
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 77 and 78
  */
 typedef union
@@ -701,9 +700,9 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief FM_RDS_INT_SOURCE property data type
- * 
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 103
  * @see also https://en.wikipedia.org/wiki/Radio_Data_System
  */
@@ -725,19 +724,19 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Data type for FM_RDS_CONFIG Property
- * 
- * IMPORTANT: all block errors must be less than or equal the associated block error threshold for the group 
- * to be stored in the RDS FIFO. 
+ *
+ * IMPORTANT: all block errors must be less than or equal the associated block error threshold for the group
+ * to be stored in the RDS FIFO.
  * 0 = No errors; 1 = 1–2 bit errors detected and corrected; 2 = 3–5 bit errors detected and corrected; 3 = Uncorrectable.
  * Recommended Block Error Threshold options:
  *  2,2,2,2 = No group stored if any errors are uncorrected.
  *  3,3,3,3 = Group stored regardless of errors.
  *  0,0,0,0 = No group stored containing corrected or uncorrected errors.
  *  3,2,3,3 = Group stored with corrected errors on B, regardless of errors on A, C, or D.
- *  
- * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 58 and 104 
+ *
+ * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 58 and 104
  */
 typedef union
 {
@@ -755,7 +754,7 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Block A data type
  */
 typedef union
@@ -773,19 +772,19 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Block B data type
- * 
+ *
  * @details For GCC on System-V ABI on 386-compatible (32-bit processors), the following stands:
- * 
+ *
  * 1) Bit-fields are allocated from right to left (least to most significant).
  * 2) A bit-field must entirely reside in a storage unit appropriate for its declared type.
  *    Thus a bit-field never crosses its unit boundary.
  * 3) Bit-fields may share a storage unit with other struct/union members, including members that are not bit-fields.
  *    Of course, struct members occupy different parts of the storage unit.
- * 4) Unnamed bit-fields' types do not affect the alignment of a structure or union, although individual 
- *    bit-fields' member offsets obey the alignment constraints.   
- * 
+ * 4) Unnamed bit-fields' types do not affect the alignment of a structure or union, although individual
+ *    bit-fields' member offsets obey the alignment constraints.
+ *
  * @see also Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 78 and 79
  * @see also https://en.wikipedia.org/wiki/Radio_Data_System
  */
@@ -828,12 +827,12 @@ typedef union
 } si47x_rds_blockb;
 
 /*
- * 
- * 
+ *
+ *
  * Group type 4A ( RDS Date and Time)
  * When group type 4A is used by the station, it shall be transmitted every minute according to EN 50067.
  * This Structure uses blocks 2,3 and 5 (B,C,D)
- * 
+ *
  * Commented due to “Crosses boundary” on GCC 32-bit plataform.
  */
 /*
@@ -852,15 +851,16 @@ typedef union {
 
 /**
  * @ingroup group01
- * 
+ *
  * Group type 4A ( RDS Date and Time)
  * When group type 4A is used by the station, it shall be transmitted every minute according to EN 50067.
  * This Structure uses blocks 2,3 and 5 (B,C,D)
- * 
- * ATTENTION: 
+ *
+ * ATTENTION:
  * To make it compatible with 8, 16 and 32 bits platforms and avoid Crosses boundary, it was necessary to
- * split minute and hour representation. 
+ * split minute and hour representation.
  */
+/*
 typedef union
 {
     struct
@@ -876,15 +876,28 @@ typedef union
     } refined;
     uint8_t raw[6];
 } si47x_rds_date_time;
+*/
+typedef union
+{
+    struct
+    {
+        uint32_t offset : 5;       // Local Time Offset
+        uint32_t offset_sense : 1; // Local Offset Sign ( 0 = + , 1 = - )
+        uint32_t minute : 6;       // UTC Minutes
+        uint32_t hour : 5;         // UTC Hours
+        uint32_t mjd : 17;         // Modified Julian Day Code
+    } refined;
+    uint8_t raw[6];
+} si47x_rds_date_time;
 
-/** 
+/**
  * @ingroup group01
- * 
+ *
  * AGC data types
  * FM / AM and SSB structure to AGC
- * 
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); For FM page 80; for AM page 142
- * @see AN332 REV 0.8 Universal Programming Guide Amendment for SI4735-D60 SSB and NBFM patches; page 18. 
+ * @see AN332 REV 0.8 Universal Programming Guide Amendment for SI4735-D60 SSB and NBFM patches; page 18.
  */
 typedef union
 {
@@ -907,13 +920,13 @@ typedef union
     uint8_t raw[3];
 } si47x_agc_status;
 
-/** 
+/**
  * @ingroup group01
- * 
- * If FM, Overrides AGC setting by disabling the AGC and forcing the LNA to have a certain gain that ranges between 0 
+ *
+ * If FM, Overrides AGC setting by disabling the AGC and forcing the LNA to have a certain gain that ranges between 0
  * (minimum attenuation) and 26 (maximum attenuation).
  * If AM, overrides the AGC setting by disabling the AGC and forcing the gain index that ranges between 0
- * 
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); For FM page 81; for AM page 143
  */
 typedef union
@@ -929,11 +942,11 @@ typedef union
     uint8_t raw[2];
 } si47x_agc_overrride;
 
-/** 
+/**
  * @ingroup group01
- * 
+ *
  * The bandwidth of the AM channel filter data type
- * AMCHFLT values: 0 = 6 kHz Bandwidth                    
+ * AMCHFLT values: 0 = 6 kHz Bandwidth
  *                 1 = 4 kHz Bandwidth
  *                 2 = 3 kHz Bandwidth
  *                 3 = 2 kHz Bandwidth
@@ -941,7 +954,7 @@ typedef union
  *                 5 = 1.8 kHz Bandwidth
  *                 6 = 2.5 kHz Bandwidth, gradual roll off
  *                 7–15 = Reserved (Do not use)
- * 
+ *
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 125 and 151
  */
 typedef union
@@ -956,12 +969,12 @@ typedef union
     uint8_t raw[2];
 } si47x_bandwidth_config; // AM_CHANNEL_FILTER
 
-/** 
+/**
  * @ingroup group01
- * 
+ *
  * SSB - datatype for SSB_MODE (property 0x0101)
- * 
- * @see AN332 REV 0.8 UNIVERSAL PROGRAMMING GUIDE; page 24 
+ *
+ * @see AN332 REV 0.8 UNIVERSAL PROGRAMMING GUIDE; page 24
  */
 typedef union
 {
@@ -980,12 +993,12 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Digital audio output format data structure (Property 0x0102. DIGITAL_OUTPUT_FORMAT).
- * 
+ *
  * @details Used to configure: DCLK edge, data format, force mono, and sample precision.
- * 
- * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 195. 
+ *
+ * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 195.
  * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); chapter 9 - Digital Audio Interface
  */
 typedef union
@@ -1003,10 +1016,10 @@ typedef union
 
 /**
  * @ingroup group01
- * @brief patch header stored in a eeprom 
- * @details This data type represents o header of a eeprom with a patch content 
+ * @brief patch header stored in a eeprom
+ * @details This data type represents o header of a eeprom with a patch content
  * @details This structure will be used to read an eeprom generated by leo sketch SI47XX_09_SAVE_SSB_PATCH_EEPROM.ino.
- * @details The sketch SI47XX_09_SAVE_SSB_PATCH_EEPROM can be found on Examples/SI47XX_TOOLS folder   
+ * @details The sketch SI47XX_09_SAVE_SSB_PATCH_EEPROM can be found on Examples/SI47XX_TOOLS folder
  */
 typedef union
 {
@@ -1022,33 +1035,32 @@ typedef union
 
 /**
  * @ingroup group01
- * 
+ *
  * @brief Digital audio output sample structure (Property 0x0104. DIGITAL_OUTPUT_SAMPLE_RATE).
- * 
+ *
  * @details Used to enable digital audio output and to configure the digital audio output sample rate in samples per second (sps).
- * 
- * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 196. 
+ *
+ * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 196.
  */
 typedef struct
 {
     uint16_t DOSR;                   // Digital Output Sample Rate(32–48 ksps .0 to disable digital audio output).
 } si4735_digital_output_sample_rate; // Maybe not necessary
 
-
-/********************************************************************** 
+/**********************************************************************
  * SI4735 Class definition
  **********************************************************************/
 
 /**
- * @brief SI4735 Class 
- * 
- * @details This class implements all functions to help you to control the Si47XX devices. 
- * This library was built based on “Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0)”. 
- * It also can be used on all members of the SI473X family respecting, of course, the features available 
- * for each IC version.  These functionalities can be seen in the comparison matrix shown in 
+ * @brief SI4735 Class
+ *
+ * @details This class implements all functions to help you to control the Si47XX devices.
+ * This library was built based on “Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0)”.
+ * It also can be used on all members of the SI473X family respecting, of course, the features available
+ * for each IC version.  These functionalities can be seen in the comparison matrix shown in
  * table 1 (Product Family Function); pages 2 and 3 of the programming guide.
- * 
- * @author PU2CLR - Ricardo Lima Caratti 
+ *
+ * @author PU2CLR - Ricardo Lima Caratti
  */
 class SI4735
 {
@@ -1073,7 +1085,7 @@ protected:
     unsigned long maxSeekTime = MAX_SEEK_TIME;                     //!< Stores the maximum time (ms) for a seeking process. Defines the maximum seeking time.
 
     uint8_t lastTextFlagAB;
-    uint8_t resetPin;     //!<  pin used on Arduino Board to RESET the Si47XX device
+    uint8_t resetPin; //!<  pin used on Arduino Board to RESET the Si47XX device
 
     uint8_t currentTune; //!<  tell the current tune (FM, AM or SSB)
 
@@ -1086,7 +1098,7 @@ protected:
     uint8_t lastMode = -1; //!<  Stores the last mode used.
 
     uint8_t currentAvcAmMaxGain = DEFAULT_CURRENT_AVC_AM_MAX_GAIN; //!<  Stores the current Automatic Volume Control Gain for AM.
-    uint8_t currentClockType = XOSCEN_CRYSTAL; //!< Stores the current clock type used (Crystal or REF CLOCK)
+    uint8_t currentClockType = XOSCEN_CRYSTAL;                     //!< Stores the current clock type used (Crystal or REF CLOCK)
     uint8_t ctsIntEnable = 0;
     uint8_t gpo2Enable = 0;
 
@@ -1122,9 +1134,45 @@ protected:
 
     void sendSSBModeProperty();
     void disableFmDebug();
-    void clearRdsBuffer2A();
-    void clearRdsBuffer2B();
-    void clearRdsBuffer0A();
+    /**
+     * @ingroup group16 RDS setup
+     * @brief Clear RDS buffer 2A (Radio Text / Program Information)
+     * @details same clearRdsProgramInformation
+     */
+    inline void clearRdsBuffer2A() { memset(rds_buffer2A, 0, sizeof(rds_buffer2A)); };
+    /**
+     * @ingroup group16 RDS setup
+     * @brief Clear RDS buffer 2A (Radio Text / Program Information)
+     * @details same clearRdsBuffer2A
+     */
+    inline void clearRdsProgramInformation() { memset(rds_buffer2A, 0, sizeof(rds_buffer2A)); };
+
+    /**
+     * @ingroup group16 RDS setup
+     * @brief Clear RDS buffer 2B (text / Station INformation 32 bytes)
+     * @details Same clearRdsStationInformation
+     */
+    inline void clearRdsBuffer2B() { memset(rds_buffer2B, 0, sizeof(rds_buffer2B)); };
+    /**
+     * @ingroup group16 RDS setup
+     * @brief Clear RDS buffer 2B (text / Station INformation 32 bytes)
+     * @details Same clearRdsBuffer2B
+     */
+    inline void clearRdsStationInformation() { memset(rds_buffer2B, 0, sizeof(rds_buffer2B)); };
+
+    /**
+     * @ingroup group16 RDS setup
+     * @brief Clear RDS buffer 0A (text / Station Name)
+     * @details clearRdsStationName
+     */
+    inline void clearRdsBuffer0A() { memset(rds_buffer0A, 0, sizeof(rds_buffer0A)); };
+    /**
+     * @ingroup group16 RDS setup
+     * @brief Clear RDS buffer 0A (text / Station Name)
+     * @details clearRdsBuffer0A
+     */
+    inline void clearRdsStationName() { memset(rds_buffer0A, 0, sizeof(rds_buffer0A)); };
+
     void getSsbAgcStatus();
 
 public:
@@ -1146,17 +1194,17 @@ public:
 
     /**
      * @ingroup group10 Generic set and get property
-     * 
-     * @brief Sets a given SI47XX device property 
-     * 
-     * @details Sets the Si47XX device with a given attribute. 
+     *
+     * @brief Sets a given SI47XX device property
+     *
+     * @details Sets the Si47XX device with a given attribute.
      * @details You might need to use the bit operations or some bit field structure to set right the values.
      * @details Used this function instead of the sendProperty.
-     * 
+     *
      * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 55, 69, 124 and  134.
      * @see getProperty, sendProperty
      * @param propertyNumber
-     * @param param  pamameter value 
+     * @param param  pamameter value
      */
     inline void setProperty(uint16_t propertyNumber, uint16_t param)
     {
@@ -1178,7 +1226,7 @@ public:
 
     uint16_t getFrequency(void);
 
-    /** 
+    /**
      * STATUS RESPONSE
      * Set of methods to get current status information. Call them after getStatus or getFrequency or seekStation
      * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 63
@@ -1187,7 +1235,7 @@ public:
     /**
      * @ingroup group08
      * @brief Get the Signal Quality Interrupt status
-     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 63            
+     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 63
      * @return RDSINT status
      */
     inline bool getSignalQualityInterrupt()
@@ -1199,7 +1247,7 @@ public:
      * @ingroup group08
      * @brief Get the Radio Data System (RDS) Interrupt status
      * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 63
-     * @return RDSINT status  
+     * @return RDSINT status
      */
     inline bool getRadioDataSystemInterrupt()
     {
@@ -1210,7 +1258,7 @@ public:
      * @ingroup group08
      * @brief Get the Tune Complete status
      * @details Seek/Tune Complete Interrupt; 1 = Tune complete has been triggered.
-     * @return STCINT status  
+     * @return STCINT status
      */
     inline bool getTuneCompleteTriggered()
     {
@@ -1219,9 +1267,9 @@ public:
 
     /**
      * @ingroup group08
-     * @brief Get the Status Error 
+     * @brief Get the Status Error
      * @details Return the Error flag (true or false) of status of the least Tune or Seek
-     * @return Error flag 
+     * @return Error flag
      */
     inline bool getStatusError()
     {
@@ -1231,16 +1279,16 @@ public:
     /**
      * @ingroup group08
      * @brief Gets the Error flag Clear to Send
-     * 
-     * @return CTS 
+     *
+     * @return CTS
      */
     inline bool getStatusCTS() { return currentStatus.resp.CTS; };
 
     /**
      * @ingroup group08
      * @brief Returns true if the AFC rails (AFC Rail Indicator).
-     * 
-     * @return true 
+     *
+     * @return true
      */
     inline bool getACFIndicator()
     {
@@ -1249,11 +1297,11 @@ public:
 
     /**
      * @ingroup group08
-     * @brief Returns true if a seek hit the band limit 
-     * 
+     * @brief Returns true if a seek hit the band limit
+     *
      * @details (WRAP = 0 in FM_START_SEEK) or wrapped to the original frequency(WRAP = 1).
-     * 
-     * @return BLTF 
+     *
+     * @return BLTF
      */
     inline bool getBandLimit()
     {
@@ -1263,11 +1311,11 @@ public:
     /**
      * @ingroup group08
      * @brief Gets the channel status
-     * 
+     *
      * @details Returns true if the channel is currently valid as determined by the seek/tune properties (0x1403, 0x1404, 0x1108)
-     * 
-     * @return true 
-     * @return false 
+     *
+     * @return true
+     * @return false
      */
     inline bool getStatusValid()
     {
@@ -1277,8 +1325,8 @@ public:
     /**
      * @ingroup group08
      * @brief Returns the value of  Received Signal Strength Indicator (dBμV).
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
     inline uint8_t getReceivedSignalStrengthIndicator()
     {
@@ -1288,10 +1336,10 @@ public:
     /**
      * @ingroup group08
      * @brief Gets the SNR metric when tune is complete (dB)
-     * 
+     *
      * @details Returns the value  of the SNR metric when tune is complete (dB).
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
     inline uint8_t getStatusSNR()
     {
@@ -1300,11 +1348,11 @@ public:
 
     /**
      * @ingroup group08
-     * @brief Get the Status the M U L T 
-     * 
+     * @brief Get the Status the M U L T
+     *
      * @details Returns the value containing the multipath metric when tune is complete.
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
     inline uint8_t getStatusMULT()
     {
@@ -1315,10 +1363,10 @@ public:
      * @ingroup group17
      * @brief Get the Antenna Tuning Capacitor value
      * @details Returns the current antenna tuning capacitor value. The tuning capacitance is 95 fF x READANTCAP + 7 pF.
-     * @details ON AM or SSB mode, the MULT attribute sotores the high byte of READANTCAP and the attribute READANTCAP by itself stores the low byte.
-     * 
+     * @details ON AM or SSB mode, the MULT attribute stores the high byte of READANTCAP and the attribute READANTCAP by itself stores the low byte.
+     *
      * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 74,74, 140 and 141.
-     * @return uint8_t capacitance 
+     * @return uint8_t capacitance
      */
     inline uint16_t getAntennaTuningCapacitor()
     {
@@ -1366,13 +1414,12 @@ public:
         currentAvcAmMaxGain = DEFAULT_CURRENT_AVC_AM_MAX_GAIN;
     };
 
-
     void setAvcAmMaxGain(uint8_t gain = 90); //!<  Sets the maximum gain for automatic volume control.
 
     /**
      * @ingroup group17
-     * @brief Get the current Avc Am Max Gain 
-     * 
+     * @brief Get the current Avc Am Max Gain
+     *
      * @return uint8_t Current AVC gain index value
      */
     inline uint8_t getCurrentAvcAmMaxGain()
@@ -1382,13 +1429,13 @@ public:
 
     /**
      * @ingroup group17
-     * @brief Sets the Am Soft Mute Max Attenuation 
-     * 
+     * @brief Sets the Am Soft Mute Max Attenuation
+     *
      * @details This function can be useful to disable Soft Mute. The value 0 disable soft mute.
      * @details Specified in units of dB. Default maximum attenuation is 8 dB. It works for AM and SSB.
-     * 
-     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 158. 
-     * 
+     *
+     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 158.
+     *
      * @param smattn Maximum attenuation to apply when in soft mute
      */
     inline void setAmSoftMuteMaxAttenuation(uint8_t smattn = 0)
@@ -1399,10 +1446,10 @@ public:
     /**
      * @ingroup group17
      * @brief Sets the SSB Soft Mute Max Attenuation object
-     * 
-     * @details Sets maximum attenuation during soft mute (dB). Set to 0 to disable soft mute. 
+     *
+     * @details Sets maximum attenuation during soft mute (dB). Set to 0 to disable soft mute.
      * @details Specified in units of dB. Default maximum attenuation is 8 dB.
-     * @details You can use setAmSoftMuteMaxAttenuation instead. Same AM property values.  
+     * @details You can use setAmSoftMuteMaxAttenuation instead. Same AM property values.
      * @param smattn Maximum attenuation to apply when in soft mute.
      */
     inline void setSsbSoftMuteMaxAttenuation(uint8_t smattn = 0)
@@ -1413,7 +1460,7 @@ public:
     /**
      * @ingroup group17
      * @brief Sets the number of milliseconds the low IF peak detector
-     * 
+     *
      * @details Sets the number of milliseconds the low IF peak detector must not be exceeded before increasing the gain. Default value is 140 (approximately 40 dB / s).
      * @param param number of milliseconds ( from 4 to 248; step 4); default value 0x008C (140).
      */
@@ -1425,7 +1472,7 @@ public:
     /**
      * @ingroup group17
      * @brief Sets the IF AGC attack rate
-     * 
+     *
      * @details Large values provide slower attack, and smaller values provide faster attack
      * @param param number of milliseconds ( from 4 to 248; step 4); default value 4.
      */
@@ -1438,7 +1485,7 @@ public:
      * @ingroup group08
      * @brief Checks if the AGC is enabled
      *
-     * @return true if the AGC is enabled 
+     * @return true if the AGC is enabled
      */
     inline bool isAgcEnabled()
     {
@@ -1448,7 +1495,7 @@ public:
     /**
      * @ingroup group08
      * @brief Gets the current AGC gain index
-     * 
+     *
      * @return uint8_t The current AGC gain index.
      */
     inline uint8_t getAgcGainIndex()
@@ -1475,8 +1522,7 @@ public:
      * @param uint8_t AGCIDX AGC Index (0 = Minimum attenuation (max gain); 1 – 36 = Intermediate attenuation);
      *                if >greater than 36 - Maximum attenuation (min gain) ).
      */
-    inline void setAGC(uint8_t AGCDIS, uint8_t AGCIDX) { setAutomaticGainControl( AGCDIS, AGCIDX); };
-
+    inline void setAGC(uint8_t AGCDIS, uint8_t AGCIDX) { setAutomaticGainControl(AGCDIS, AGCIDX); };
 
     void setSsbAgcOverrite(uint8_t SSBAGCDIS, uint8_t SSBAGCNDX, uint8_t reserved = 0);
 
@@ -1488,7 +1534,7 @@ public:
     /**
      * @ingroup group08
      * @brief Get the current receive signal strength (0–127 dBμV)
-     * 
+     *
      * @return uint8_t a value between 0 to 127
      */
     inline uint8_t getCurrentRSSI()
@@ -1499,7 +1545,7 @@ public:
     /**
      * @ingroup group08
      * @brief Gets the current SNR metric (0–127 dB).
-     * 
+     *
      * @return uint8_t SNR value in dB (0-127)
      */
     inline uint8_t getCurrentSNR()
@@ -1509,8 +1555,8 @@ public:
 
     /**
      * @ingroup group08
-     * @brief Checks if RSSI detected is LOW. 
-     * 
+     * @brief Checks if RSSI detected is LOW.
+     *
      * @return true if RSSI is low
      */
     inline bool getCurrentRssiDetectLow()
@@ -1520,8 +1566,8 @@ public:
 
     /**
      * @ingroup group08
-     * @brief Checks if RSSI detected is high 
-     * 
+     * @brief Checks if RSSI detected is high
+     *
      * @return true if RSSI detected is high
      */
     inline bool getCurrentRssiDetectHigh()
@@ -1532,7 +1578,7 @@ public:
     /**
      * @ingroup group08
      * @brief Checks if SNR detect is low
-     * 
+     *
      * @return true if SNR detected is low
      */
     inline bool getCurrentSnrDetectLow()
@@ -1543,7 +1589,7 @@ public:
     /**
      * @ingroup group08
      * @brief Checks if SNR detect is high
-     * 
+     *
      * @return true  if SNR detect is high
      */
     inline bool getCurrentSnrDetectHigh()
@@ -1554,7 +1600,7 @@ public:
     /**
      * @ingroup group08
      * @brief Checks if the current channel is valid
-     * 
+     *
      * @return true if the current channel is valid
      */
     inline bool getCurrentValidChannel()
@@ -1565,7 +1611,7 @@ public:
     /**
      * @ingroup group08
      * @brief AFC Rail Indicator
-     * 
+     *
      * @return true or false
      */
     inline bool getCurrentAfcRailIndicator()
@@ -1575,10 +1621,10 @@ public:
 
     /**
      * @ingroup group08
-     * @brief Soft Mute Indicator. 
-     * 
+     * @brief Soft Mute Indicator.
+     *
      * @details Indicates soft mute is engaged.
-     * 
+     *
      * @return true  if soft mute indicates is engaged.
      */
     inline bool getCurrentSoftMuteIndicator()
@@ -1591,7 +1637,7 @@ public:
     /**
      * @ingroup group08
      * @brief Gets the value of the amount of stereo blend in % (100 = full stereo, 0 = full mono).
-     * 
+     *
      * @return uint8_t value (0 to 100)
      */
     inline uint8_t getCurrentStereoBlend()
@@ -1601,10 +1647,10 @@ public:
 
     /**
      * @ingroup group08
-     * @brief Checks the current pilot 
-     * 
+     * @brief Checks the current pilot
+     *
      * @details Indicates stereo pilot presence.
-     * 
+     *
      * @return true if stereo pilot presence has detected
      */
     inline bool getCurrentPilot()
@@ -1615,9 +1661,9 @@ public:
     /**
      * @ingroup group08
      * @brief Gets the current Multipath
-     *  
+     *
      * @details Contains the current multipath metric. (0 = no multipath; 100 = full multipath)
-     * 
+     *
      * @return uint8_t value (0 to 100)
      */
     inline uint8_t getCurrentMultipath()
@@ -1628,131 +1674,143 @@ public:
     /**
      * @ingroup group08
      * @brief Gets the Signed frequency offset (kHz).
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
-    inline uint8_t getCurrentSignedFrequencyOffset() {
-         return currentRqsStatus.resp.FREQOFF; 
-    }; 
+    inline uint8_t getCurrentSignedFrequencyOffset()
+    {
+        return currentRqsStatus.resp.FREQOFF;
+    };
 
     /**
      * @ingroup group08
      * @brief Get Multipath Detect Low
-     * 
-     * @return true 
-     * @return false 
+     *
+     * @return true
+     * @return false
      */
-    inline bool getCurrentMultipathDetectLow() { 
-        return currentRqsStatus.resp.MULTLINT; 
-    };     
+    inline bool getCurrentMultipathDetectLow()
+    {
+        return currentRqsStatus.resp.MULTLINT;
+    };
 
     /**
      * @ingroup group08
-     * @brief Gets the Current Multipath Detect High 
-     * 
-     * @return true 
-     * @return false 
+     * @brief Gets the Current Multipath Detect High
+     *
+     * @return true
+     * @return false
      */
-    inline bool getCurrentMultipathDetectHigh() { 
-        return currentRqsStatus.resp.MULTHINT; 
-    };   
+    inline bool getCurrentMultipathDetectHigh()
+    {
+        return currentRqsStatus.resp.MULTHINT;
+    };
 
     /**
      * @ingroup group08
      * @brief Gets the Current Blend Detect Interrupt
-     * 
-     * @return true 
-     * @return false 
+     *
+     * @return true
+     * @return false
      */
-    inline bool getCurrentBlendDetectInterrupt() { 
-        return currentRqsStatus.resp.BLENDINT; 
-    };    
+    inline bool getCurrentBlendDetectInterrupt()
+    {
+        return currentRqsStatus.resp.BLENDINT;
+    };
 
     /*
      * FIRMWARE RESPONSE
-     * 
+     *
      * See Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 66
      */
 
     /**
      * @ingroup group06
      * @brief Returns the Firmware Part Number
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
-    inline uint8_t getFirmwarePN() { 
-        return firmwareInfo.resp.PN; 
-    }; 
+    inline uint8_t getFirmwarePN()
+    {
+        return firmwareInfo.resp.PN;
+    };
 
     /**
      * @ingroup group06
      * @brief Returns the Firmware F W M A J O R
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
-    inline uint8_t getFirmwareFWMAJOR() { 
-        return firmwareInfo.resp.FWMAJOR; 
-    };  
+    inline uint8_t getFirmwareFWMAJOR()
+    {
+        return firmwareInfo.resp.FWMAJOR;
+    };
 
     /**
      * @ingroup group06
-     * @brief Returns the Firmware F W M I N O R 
-     * 
-     * @return uint8_t 
+     * @brief Returns the Firmware F W M I N O R
+     *
+     * @return uint8_t
      */
-    inline uint8_t getFirmwareFWMINOR() { 
-        return firmwareInfo.resp.FWMINOR; 
-    };   
+    inline uint8_t getFirmwareFWMINOR()
+    {
+        return firmwareInfo.resp.FWMINOR;
+    };
 
     /**
      * @ingroup group06
      * @brief Returns the Firmware P A T C H  HIGH
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
-    inline uint8_t getFirmwarePATCHH() { 
-        return firmwareInfo.resp.PATCHH; 
-    }; 
+    inline uint8_t getFirmwarePATCHH()
+    {
+        return firmwareInfo.resp.PATCHH;
+    };
 
     /**
      * @ingroup group06
      * @brief Returns the Firmware P A T C H  LOW
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
-    inline uint8_t getFirmwarePATCHL() { 
-        return firmwareInfo.resp.PATCHL; 
-    };   
+    inline uint8_t getFirmwarePATCHL()
+    {
+        return firmwareInfo.resp.PATCHL;
+    };
 
     /**
      * @ingroup group06
      * @brief Get the Firmware C M P M A J O R object
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
-    inline uint8_t getFirmwareCMPMAJOR() { 
-        return firmwareInfo.resp.CMPMAJOR; 
+    inline uint8_t getFirmwareCMPMAJOR()
+    {
+        return firmwareInfo.resp.CMPMAJOR;
     }; //!<  RESP6 -  Returns the Component Major Revision (ASCII).
 
     /**
      * @ingroup group06
      * @brief Returns the Component Minor Revision (ASCII) (RESP7)
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
-    inline uint8_t getFirmwareCMPMINOR() { 
-        return firmwareInfo.resp.CMPMINOR; 
+    inline uint8_t getFirmwareCMPMINOR()
+    {
+        return firmwareInfo.resp.CMPMINOR;
     };
 
     /**
      * @ingroup group06
      * @brief RESP8 -  Returns the Chip Revision (ASCII)
-     * 
-     * @return uint8_t 
+     *
+     * @return uint8_t
      */
-    inline uint8_t getFirmwareCHIPREV() { 
-        return firmwareInfo.resp.CHIPREV; 
-    }; 
+    inline uint8_t getFirmwareCHIPREV()
+    {
+        return firmwareInfo.resp.CHIPREV;
+    };
 
     void setVolume(uint8_t volume);
     uint8_t getVolume();
@@ -1761,9 +1819,9 @@ public:
 
     /**
      * @ingroup group13 Audio volume
-     * @brief Get the Current Volume 
+     * @brief Get the Current Volume
      * @details Returns the current volume level.
-     * @return uint8_t 
+     * @return uint8_t
      */
     inline uint8_t getCurrentVolume() { return volume; };
 
@@ -1776,27 +1834,27 @@ public:
     inline void setVolumeUp() { volumeUp(); };
     /**
      * @ingroup group13 Audio volume
-     * @brief Set the Volume Down 
+     * @brief Set the Volume Down
      * @details Same volumeDown()
-     * @return voi 
+     * @return voi
      */
     inline void setVolumeDown() { volumeDown(); };
 
     /**
      * @ingroup group13 Digital Audio setup
-     * @brief Sets the Audio Mode. See table below. 
-     * @details If you want to change the audio mode, call this function before call setAM(), setFM() or setSSB(). 
-     * @details Sets the Si47XX device to use ANALOG or DIGITAL audio output. The table below show the valid values. 
+     * @brief Sets the Audio Mode. See table below.
+     * @details If you want to change the audio mode, call this function before call setAM(), setFM() or setSSB().
+     * @details Sets the Si47XX device to use ANALOG or DIGITAL audio output. The table below shows the valid values.
      * @details This function will only take effect after calling setAM(), setFM() or setSSB().
-     * 
-     * 
+     *
+     *
      * | Macro | Value (Binary) | Description |
-     * | ----- | ----- | ----------- | 
+     * | ----- | ----- | ----------- |
      * | SI473X_ANALOG_AUDIO | 0b00000101 | Analog Audio Inputs |
      * | SI473X_DIGITAL_AUDIO1 | 0b00001011 | Digital audio output (DCLK, LOUT/DFS, ROUT/DIO) |
      * | SI473X_DIGITAL_AUDIO2  | 0b10110000 | Digital audio outputs (DCLK, DFS, DIO) |
      * | SI473X_DIGITAL_AUDIO3 | 0b10110101 | Analog and digital audio outputs (LOUT/ROUT and DCLK, DFS,DIO) |
-     * 
+     *
      * @see setAM(), setFM(), setSSB().
      * @param audioMode One of the values options above
      */
@@ -1807,14 +1865,15 @@ public:
 
     /**
      * @ingroup group13 Audio Noise Blank Delay
-     * @brief Sets the delay before applying impulse blanking 
+     * @brief Sets the delay before applying impulse blanking
      * @details Delay in micro-seconds before applying impulse blanking to the original samples. Default value is 172.
-     * 
+     *
      * @param value Delay in micro-seconds
      */
-    inline void setAmDelayNB(uint16_t value) {
+    inline void setAmDelayNB(uint16_t value)
+    {
         sendProperty(AM_NB_DELAY, value);
-    } 
+    }
 
     void digitalOutputFormat(uint8_t OSIZE, uint8_t OMONO, uint8_t OMODE, uint8_t OFALL);
     void digitalOutputSampleRate(uint16_t DOSR);
@@ -1828,9 +1887,9 @@ public:
 
     /**
      * @ingroup group08
-     * @brief Sets the FM Receive de-emphasis to 50 or 75 μs. 
+     * @brief Sets the FM Receive de-emphasis to 50 or 75 μs.
      * @details valid parameters are 1 = 50 μs. Usedin Europe, Australia, Japan; 2 = 75 μs. Used in USA (default)
-     * 
+     *
      * @param parameter 1 or 2 (default 1 - USA)
      */
     inline void setFMDeEmphasis(uint8_t parameter)
@@ -1840,13 +1899,13 @@ public:
 
     /**
      * @ingroup group08
-     * @brief Sets the Fm Soft Mute Max Attenuation 
-     * 
+     * @brief Sets the Fm Soft Mute Max Attenuation
+     *
      * @details This function can be useful to disable Soft Mute on FM mode. The value 0 disable soft mute.
      * @details Specified in units of dB. Default maximum attenuation is 8 dB. It works for AM and SSB.
-     * 
-     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 97. 
-     * 
+     *
+     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); page 97.
+     *
      * @param smattn Maximum attenuation to apply when in soft mute
      */
     inline void setFmSoftMuteMaxAttenuation(uint8_t smattn = 0)
@@ -1855,23 +1914,23 @@ public:
     };
 
     /**
-    * @brief Set the Fm Noise Blank Threshold 
-    * @details Sets the threshold for detecting impulses in dB above the noise floor. The CTS bit (and optional interrupt) is set when it is safe to send the next command.
-    * @param parameter (from 0 to 90. default is 10)
-    */
+     * @brief Set the Fm Noise Blank Threshold
+     * @details Sets the threshold for detecting impulses in dB above the noise floor. The CTS bit (and optional interrupt) is set when it is safe to send the next command.
+     * @param parameter (from 0 to 90. default is 10)
+     */
     inline void setFmNoiseBlankThreshold(uint16_t parameter)
     {
         sendProperty(FM_NB_DETECT_THRESHOLD, parameter);
     };
 
     /**
-     * @brief Set the Fm Noise Blank 
+     * @brief Set the Fm Noise Blank
      * @details Sets Noise blanking rate in 100 Hz units
      * @details Sets the Interval in micro-seconds that original samples are replaced by sample-hold clean samples.
      * @details Sets the bandwidth of the noise floor estimator.
-     * 
-     * @details ATTENTION: It works on SI474X. It may not work on SI473X devices. 
-     * 
+     *
+     * @details ATTENTION: It works on SI474X. It may not work on SI473X devices.
+     *
      * @param nb_rate Noise blanking rate in 100 Hz units. Default value is 64.
      * @param nb_interval Interval in micro-seconds that original samples are replaced by interpolated clean samples. Default value is 55 μs.
      * @param nb_irr_filter Sets the bandwidth of the noise floor estimator. Default value is 300.
@@ -1884,7 +1943,7 @@ public:
     }
 
     /**
-     * @brief Set the Fm Noise Blank Interval 
+     * @brief Set the Fm Noise Blank Interval
      * @details Interval in micro-seconds that original samples are replaced by interpolated clean samples.
      * @param parameter ( from 8 to 48. default value is 24)
      */
@@ -1896,7 +1955,7 @@ public:
     /**
      * @brief Set the Fm Noise Blank Rate
      * @details Noise blanking rate in 100 Hz units.
-     * 
+     *
      * @param parameter ( from 1 to 64. default value is 64)
      */
     inline void setFmNoiseBlankRate(uint16_t parameter)
@@ -1909,13 +1968,13 @@ public:
      * @details Delay in micro-seconds before applying impulse blanking to the original samples.
      * @param parameter ( from 125 to 219. default value is 170)
      */
-    inline void  setFmNoiseBlankDelay(uint16_t parameter)
+    inline void setFmNoiseBlankDelay(uint16_t parameter)
     {
         sendProperty(FM_NB_DELAY, parameter);
     };
 
     /**
-     * @brief Set the FmNoiseBlank IIR Filter 
+     * @brief Set the FmNoiseBlank IIR Filter
      * @details Sets the bandwidth of the noise floor estimator.
      * @param parameter (from 300 to 1600. default value is 300)
      */
@@ -1926,12 +1985,12 @@ public:
 
     /**
      * @ingroup group08
-     * @brief Sets the AM Receive de-emphasis to 50 or disable. 
+     * @brief Sets the AM Receive de-emphasis to 50 or disable.
      * @details valid parameters are 1 = 50 μs. Usedin urope, Australia, Japan; 2 = 75 μs. Used in USA (default)
-     * 
+     *
      * @param parameter 1 = enable or 0 = disable
      */
-   inline void setAMDeEmphasis(uint8_t parameter)
+    inline void setAMDeEmphasis(uint8_t parameter)
     {
         sendProperty(AM_DEEMPHASIS, parameter);
     };
@@ -1942,16 +2001,15 @@ public:
      * @details Configures attenuation slope during soft mute in dB attenuation per dB SNR below the soft mute SNR threshold.
      * @details Soft mute attenuation is the minimum of SMSLOPEx(SMTHR–SNR) and SMATTN.
      * @details The default slope is 1 dB/dB for AMRX component 5.0 or later and 2 dB/dB for AMRX component 3.0 or earlier.
-     * 
+     *
      * @see setAmSoftMuteMaxAttenuation
-     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); 
+     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0);
      * @param parameter  the valid values are 1–5 (default 1).
      */
     inline void setAMSoftMuteSlop(uint8_t parameter)
     {
-       sendProperty(AM_SOFT_MUTE_SLOPE, parameter);
+        sendProperty(AM_SOFT_MUTE_SLOPE, parameter);
     };
-
 
     /**
      * @ingroup group08
@@ -1959,14 +2017,13 @@ public:
      * @details The value specified is multiplied by 4.35 dB/s to come up with the actual attack rate
      * @details The default rate is 278 dB/s.
      * @see setAmSoftMuteMaxAttenuation
-     * @see Si47XX PRORAMMING GUIDE; AN332 (REV 1.0); 
+     * @see Si47XX PRORAMMING GUIDE; AN332 (REV 1.0);
      * @param parameter  The valid values are 1-255  ( Default is ~64 - [64 x 4.35 = 278] )
      */
     inline void setAMSoftMuteRate(uint8_t parameter)
     {
-       sendProperty(AM_SOFT_MUTE_RATE, parameter);
+        sendProperty(AM_SOFT_MUTE_RATE, parameter);
     };
-
 
     /**
      * @ingroup group08
@@ -1974,12 +2031,12 @@ public:
      * @details Whenever the SNR for a tuned frequency drops below this threshold the AM reception will go in soft mute,
      * @details provided soft mute max attenuation property is non-zero. The default value is 8dB
      * @see setAmSoftMuteMxAttenuation
-     * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.0); 
+     * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.0);
      * @param parameter  0-63 (default is 8)
      */
     inline void setAMSoftMuteSnrThreshold(uint8_t parameter)
     {
-       sendProperty(AM_SOFT_MUTE_SNR_THRESHOLD, parameter);
+        sendProperty(AM_SOFT_MUTE_SNR_THRESHOLD, parameter);
     };
 
     /**
@@ -1987,34 +2044,34 @@ public:
      * @brief Sets the soft mute release rate.
      * @details Smaller values provide slower release and larger values provide faster release. The default is 8192 (approximately 8000 dB/s).
      * @see setAmSoftMuteMxAttenuation
-     * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.0); 
-     * @param parameter  1–32767 
+     * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.0);
+     * @param parameter  1–32767
      */
     inline void setAMSoftMuteReleaseRate(uint8_t parameter)
     {
-       sendProperty(AM_SOFT_MUTE_RELEASE_RATE, parameter);
+        sendProperty(AM_SOFT_MUTE_RELEASE_RATE, parameter);
     };
 
     /**
      * @ingroup group08
      * @brief Sets the soft mute attack rate.
-     * @details Smaller values provide slower attack and larger values provide faster attack. 
+     * @details Smaller values provide slower attack and larger values provide faster attack.
      * @see setAmSoftMuteMxAttenuation
-     * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.0); 
+     * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.0);
      * @param parameter  1–32767 (The default is 8192 (approximately 8000 dB/s)
      */
     inline void setAMSoftMuteAttackRate(uint16_t parameter)
     {
-       sendProperty(AM_SOFT_MUTE_ATTACK_RATE, parameter);
+        sendProperty(AM_SOFT_MUTE_ATTACK_RATE, parameter);
     };
 
     /**
      * @ingroup group08
      * @brief Sets the AGC attack rate.
-     * @details Large values provide slower attack, and smaller values provide faster attack.. 
+     * @details Large values provide slower attack, and smaller values provide faster attack..
      * @see setAmAgcAttackRate
-     * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.2); page 167 
-     * @param parameter Range: 4–248 (The default is 0x04) 
+     * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.2); page 167
+     * @param parameter Range: 4–248 (The default is 0x04)
      */
     inline void setAmAgcAttackRate(uint16_t parameter)
     {
@@ -2026,8 +2083,8 @@ public:
      * @brief Sets the AGC release rate.
      * @details  Larger values provide slower release, and smaller values provide faster release.
      * @see setAmAgcReleaseRate
-     * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.2); page 168 
-     * @param parameter Range: 4–248 (The default is 0x8C) 
+     * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.2); page 168
+     * @param parameter Range: 4–248 (The default is 0x8C)
      */
     inline void setAmAgcReleaseRate(uint16_t parameter)
     {
@@ -2037,10 +2094,10 @@ public:
     /**
      * @ingroup group17
      * @brief Sets the AGC attack rate on SSB mode.
-     * @details Large values provide slower attack, and smaller values provide faster attack.. 
+     * @details Large values provide slower attack, and smaller values provide faster attack..
      * @see setSsbAgcAttackRate
-     * @see AN332 REV 0.8 UNIVERSAL PROGRAMMING GUIDE; page 29 
-     * @param parameter Range: 4–248 (The default is 0x04) 
+     * @see AN332 REV 0.8 UNIVERSAL PROGRAMMING GUIDE; page 29
+     * @param parameter Range: 4–248 (The default is 0x04)
      */
     inline void setSsbAgcAttackRate(uint16_t parameter)
     {
@@ -2050,9 +2107,9 @@ public:
     /**
      * @ingroup group17
      * @brief Sets the AGC Release rate on SSB mode.
-     * @details Larger values provide slower release, and smaller values provide faster release. 
+     * @details Larger values provide slower release, and smaller values provide faster release.
      * @see setSsbAgcAttackRate
-     * @see AN332 REV 0.8 UNIVERSAL PROGRAMMING GUIDE; page 29 
+     * @see AN332 REV 0.8 UNIVERSAL PROGRAMMING GUIDE; page 29
      * @param parameter Range: 4–248 (The default is 0x18)
      */
     inline void setSsbAgcReleaseRate(uint16_t parameter)
@@ -2064,15 +2121,15 @@ public:
      * @ingroup group08
      * @brief Adjusts the AM AGC for external front-end attenuator and external front-end cascode LNA.
      * @details This property contains two fields: MIN_GAIN_INDEX and ATTN_BACKUP.
-     * @details MIN_GAIN_INDEX impacts sensitivity and U/D performance. Lower values improve sensitivity, but degrade 
-     * @details far away blocker U/D performance. 
-     * @details Higher values degrade sensitivity, but improve U/D. With MIN_GAIN_INDEX=19 and Si4743 EVB reference 
+     * @details MIN_GAIN_INDEX impacts sensitivity and U/D performance. Lower values improve sensitivity, but degrade
+     * @details far away blocker U/D performance.
+     * @details Higher values degrade sensitivity, but improve U/D. With MIN_GAIN_INDEX=19 and Si4743 EVB reference
      * @details design, the Si474x provides sensitivity of 28dBuV typical and U/D exceeding 55dB on far away blockers.
-     * @details With MIN_GAIN_INDEX=24, the Si474x provides sensitivity of 34dBuV typical and U/D approaching 70dB on 
-     * @details far away blockers. 
+     * @details With MIN_GAIN_INDEX=24, the Si474x provides sensitivity of 34dBuV typical and U/D approaching 70dB on
+     * @details far away blockers.
      * @see Si47XX PROAMMING GUIDE; AN332 (REV 1.0); page 168
      * @param MIN_GAIN_INDEX Values below 19 have minimal sensitivity improvement; Higher values degrade sensitivity, but improve U/D.
-     * @param ATTN_BACKUP ??? 
+     * @param ATTN_BACKUP ???
      */
     inline void setAMFrontEndAgcControl(uint8_t MIN_GAIN_INDEX, uint8_t ATTN_BACKUP)
     {
@@ -2085,18 +2142,18 @@ public:
     };
 
     /**
-     * @brief Set the Am Noise Blank 
-     * 
+     * @brief Set the Am Noise Blank
+     *
      * @details Sets Noise blanking rate in 100 Hz units
      * @details Sets the Interval in micro-seconds that original samples are replaced by sample-hold clean samples.
      * @details Sets the bandwidth of the noise floor estimator.
-     * 
-     * @details ATTENTION: It works on SI474X. It may not work on SI473X devices. 
-     * 
+     *
+     * @details ATTENTION: It works on SI474X. It may not work on SI473X devices.
+     *
      * @param nb_rate Noise blanking rate in 100 Hz units. Default value is 64.
      * @param nb_interval Interval in micro-seconds that original samples are replaced by interpolated clean samples. Default value is 55 μs.
      * @param nb_irr_filter Sets the bandwidth of the noise floor estimator. Default value is 300.
-     * 
+     *
      */
     inline void setAmNoiseBlank(uint16_t nb_rate = 64, uint16_t nb_interval = 55, uint16_t nb_irr_filter = 300)
     {
@@ -2105,9 +2162,9 @@ public:
         sendProperty(AM_NB_IIR_FILTER, nb_irr_filter);
     }
 
-    /* @ingroup group08 Check FM mode status 
+    /* @ingroup group08 Check FM mode status
      * @brief Returns true if the current function is FM (FM_TUNE_FREQ).
-     * 
+     *
      * @return true if the current function is FM (FM_TUNE_FREQ).
      */
     inline bool isCurrentTuneFM()
@@ -2117,9 +2174,9 @@ public:
 
     /**
      * @ingroup group08 Check AM mode status
-     * 
+     *
      * @brief Returns true if the current function is AM (AM_TUNE_FREQ).
-     * 
+     *
      * @return true if the current function is AM (AM_TUNE_FREQ).
      */
     inline bool isCurrentTuneAM()
@@ -2129,9 +2186,9 @@ public:
 
     /**
      * @ingroup group08 Check SSB mode status
-     * 
+     *
      * @brief Returns true if the current function is SSB (SSB_TUNE_FREQ).
-     * 
+     *
      * @return true if the current function is SSB (SSB_TUNE_FREQ).
      */
     inline bool isCurrentTuneSSB()
@@ -2151,8 +2208,8 @@ public:
      * @details |    2    | Force narrow (84 kHz) channel filter |
      * @details |    3    | Force narrower (60 kHz) channel filter |
      * @details |    4    | Force narrowest (40 kHz) channel filter |
-     * 
-     * @param filter_value 
+     *
+     * @param filter_value
      */
     inline void setFmBandwidth(uint8_t filter_value = 0)
     {
@@ -2160,64 +2217,67 @@ public:
     }
 
     /**
-     * @ingroup group08 Tune Frequency 
+     * @ingroup group08 Tune Frequency
      * @brief Returns the FAST tuning status
-     * 
-     * @retrn uint8_t 
+     *
+     * @retrn uint8_t
      */
-    inline uint8_t getTuneFrequecyFast() { 
-        return currentFrequencyParams.arg.FAST; 
-    };  
+    inline uint8_t getTuneFrequecyFast()
+    {
+        return currentFrequencyParams.arg.FAST;
+    };
 
     /**
-     * @ingroup group08 Tune Frequency 
-     * @brief Sets the FAST Tuning.  
+     * @ingroup group08 Tune Frequency
+     * @brief Sets the FAST Tuning.
      * @details If set, excutes fast and invalidated tune. Theune status will not be accurate
-     * 
-     * @param FAST 
+     *
+     * @param FAST
      */
-    inline void setTuneFrequencyFast (uint8_t FAST) { 
-        currentFrequencyParams.arg.FAST = FAST; 
-    };   
+    inline void setTuneFrequencyFast(uint8_t FAST)
+    {
+        currentFrequencyParams.arg.FAST = FAST;
+    };
 
     /**
-     * @ingroup group08 Tune Frequency 
+     * @ingroup group08 Tune Frequency
      * @brief Returns the FREEZE status
-     * 
-     * @return unt8_t 
+     *
+     * @return unt8_t
      */
-    inline uint8_t getTuneFrequecyFreeze() { 
-        return currentFrequencyParams.arg.FREEZE; 
-    };  
-    
+    inline uint8_t getTuneFrequecyFreeze()
+    {
+        return currentFrequencyParams.arg.FREEZE;
+    };
+
     /**
-     * @ingroup group08 Tune Frequency 
+     * @ingroup group08 Tune Frequency
      * @brief Sets Freeze Metrics During Alternate Frequency Jum.
      * @details Only on FM mode
-     * 
-     * @param FREEZE 
+     *
+     * @param FREEZE
      */
-    inline void setTuneFrequencyFreze(uint8_t FREEZE) { 
-        currentFrequencyParams.arg.FREEZE = FREEZE; 
-    }; 
-   
-    
+    inline void setTuneFrequencyFreze(uint8_t FREEZE)
+    {
+        currentFrequencyParams.arg.FREEZE = FREEZE;
+    };
+
     void setTuneFrequencyAntennaCapacitor(uint16_t capacitor);
 
     void frequencyUp();
     void frequencyDown();
 
     /**
-     * @ingroup group08 Tune Frequency 
-     * @brief Set the FrequencyUp 
+     * @ingroup group08 Tune Frequency
+     * @brief Set the FrequencyUp
      * @details Same frequencyUp
      * @see frequencyUp
      */
     inline void setFrequencyUp() { frequencyUp(); };
 
     /**
-     * @ingroup   group08 Tune Frequency 
-     * @brief Set the Frequency Down 
+     * @ingroup   group08 Tune Frequency
+     * @brief Set the Frequency Down
      * @details same frequencyDown
      * @see frequencyDown
      */
@@ -2228,14 +2288,14 @@ public:
     void seekStation(uint8_t SEEKUP, uint8_t WRAP); // See WRAP parameter
 
     /**
-     * @ingroup group08 Seek 
+     * @ingroup group08 Seek
      * @brief Sets the maximum time in milliseconds for seeking. The default value is 8000ms (8s).
      * @details Depending on the bandwidth, your reception conditions or step configuration, the seek process can take a long time.
      * @details This function sets a time limit for seeking process and back the control to the system if the time runs out.
-     * 
+     *
      * @addindex Seek
-     * 
-     * @param time_in_ms time in milliseconds. 
+     *
+     * @param time_in_ms time in milliseconds.
      */
     inline void setMaxSeekTime(long time_in_ms)
     {
@@ -2243,26 +2303,26 @@ public:
     };
 
     /**
-    * @ingroup group08 Seek 
-    * 
-    * @brief Search for the next station
-    * @details Seek a station up. Stop when a station is found or the frequency has reached the upper limit  
-    * @see seekStation, seekStationProgress, setSeekAmLimits setSeekFmLimits 
-    * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 124, 137, 139, 278
-    */
+     * @ingroup group08 Seek
+     *
+     * @brief Search for the next station
+     * @details Seek a station up. Stop when a station is found or the frequency has reached the upper limit
+     * @see seekStation, seekStationProgress, setSeekAmLimits setSeekFmLimits
+     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 124, 137, 139, 278
+     */
     inline void seekStationUp()
     {
         seekStationProgress(NULL, SEEK_UP);
     };
 
     /**
-    * @ingroup group08 Seek 
-    * 
-    * @brief Search the previous station
-    * @details Seek a station Down. Stop when a station is found or the frequency has reached the lower limit  
-    * @see seekStation, seekStationProgress, setSeekAmLimits, setSeekFmLimits
-    * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 124, 137, 139, 278 
-    */
+     * @ingroup group08 Seek
+     *
+     * @brief Search the previous station
+     * @details Seek a station Down. Stop when a station is found or the frequency has reached the lower limit
+     * @see seekStation, seekStationProgress, setSeekAmLimits, setSeekFmLimits
+     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 124, 137, 139, 278
+     */
     inline void seekStationDown()
     {
         seekStationProgress(NULL, SEEK_DOWN);
@@ -2272,7 +2332,7 @@ public:
     void seekPreviousStation();
 
     void seekStationProgress(void (*showFunc)(uint16_t f), uint8_t up_down);
-    void seekStationProgress(void (*showFunc)(uint16_t f), bool (*stopSeking)(),  uint8_t up_down);
+    void seekStationProgress(void (*showFunc)(uint16_t f), bool (*stopSeking)(), uint8_t up_down);
 
     // AM Seek property configurations
     void setSeekAmLimits(uint16_t bottom, uint16_t top);
@@ -2283,9 +2343,9 @@ public:
      * @brief Set the Seek Am Srn Threshold object
      * @deprecated Use setSeekAmSNRThreshold instead.
      * @see setSeekAmSNRThreshold
-     * @param value 
+     * @param value
      */
-    void inline setSeekAmSrnThreshold(uint16_t value) { sendProperty(AM_SEEK_SNR_THRESHOLD, value); }; // Wrong name! Will be removed later  
+    void inline setSeekAmSrnThreshold(uint16_t value) { sendProperty(AM_SEEK_SNR_THRESHOLD, value); }; // Wrong name! Will be removed later
 
     /**
      * @ingroup group08 Seek
@@ -2308,10 +2368,10 @@ public:
      * @brief Set the Seek Fm Srn Threshold object
      * @deprecated Use setSeekFmSNRThreshold instead.
      * @see setSeekFmSNRThreshold
-     * @param value 
+     * @param value
      */
     void inline setSeekFmSrnThreshold(uint16_t value) { sendProperty(FM_SEEK_TUNE_SNR_THRESHOLD, value); }; // Wrong name. Will be removed later
-    
+
     /**
      * @ingroup group08 Seek
      *
@@ -2323,7 +2383,7 @@ public:
      * @param value between 0 and 127.
      */
     void inline setSeekFmSNRThreshold(uint16_t value) { sendProperty(FM_SEEK_TUNE_SNR_THRESHOLD, value); }; // Fixing the function name
-    
+
     void setSeekFmRssiThreshold(uint16_t value);
 
     void setFmBlendStereoThreshold(uint8_t parameter);
@@ -2338,8 +2398,25 @@ public:
     void setFmStereoOff();
 
     void RdsInit();
+    /**
+     * @ingroup group16 RDS setup 
+     * @brief  Starts the control member variables for RDS. It is an alias to RdsInit  (a better name to RdsInit)
+     * @details This method is called by setRdsConfig()
+     * @see setRdsConfig()
+     */
+    void inline clearRdsBuffer() { RdsInit();};
     void setRdsIntSource(uint8_t RDSRECV, uint8_t RDSSYNCLOST, uint8_t RDSSYNCFOUND, uint8_t RDSNEWBLOCKA, uint8_t RDSNEWBLOCKB);
     void getRdsStatus(uint8_t INTACK, uint8_t MTFIFO, uint8_t STATUSONLY);
+    /**
+     * @ingroup group16 RDS status
+     *
+     * @brief Retrieves the current RDS data to be utilized by other RDS functions.
+     * @details Just another way to call getRdsStatus. Both do the same thing.
+     * @details This function must be called before calling any RDS function.
+     * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 55 and 77
+     * @see getRdsStatus
+     */
+    inline void rdsBeginQuery() { this->getRdsStatus(0, 0, 0); };
 
     /**
      * @ingroup group16 RDS
@@ -2355,8 +2432,8 @@ public:
     /**
      * @ingroup group16 RDS
      * @brief Get the Rds Sync Lost object
-     * @details returns true (1) if Lost RDS synchronization is detected. 
-     * @return true if Lost RDS synchronization detected. 
+     * @details returns true (1) if Lost RDS synchronization is detected.
+     * @return true if Lost RDS synchronization detected.
      */
     inline bool getRdsSyncLost()
     {
@@ -2365,7 +2442,7 @@ public:
 
     /**
      * @ingroup group16 RDS
-     * @brief Get the Rds Sync Found 
+     * @brief Get the Rds Sync Found
      * @details return true if found RDS synchronization
      * @return true if found RDS synchronization
      */
@@ -2376,8 +2453,8 @@ public:
 
     /**
      * @ingroup group16 RDS
-     * @brief Get the Rds New Block A 
-     * 
+     * @brief Get the Rds New Block A
+     *
      * @details Returns true if valid Block A data has been received.
      * @return true or false
      */
@@ -2388,7 +2465,7 @@ public:
 
     /**
      * @ingroup group16 RDS
-     * @brief Get the Rds New Block B 
+     * @brief Get the Rds New Block B
      * @details Returns true if valid Block B data has been received.
      * @return true or false
      */
@@ -2399,7 +2476,7 @@ public:
 
     /**
      * @ingroup group16 RDS
-     * @brief Get the Rds Sync 
+     * @brief Get the Rds Sync
      * @details Returns true if RDS currently synchronized.
      * @return true or false
      */
@@ -2410,7 +2487,7 @@ public:
 
     /**
      * @ingroup group16 RDS
-     * @brief Get the Group Lost 
+     * @brief Get the Group Lost
      * @details Returns true if one or more RDS groups discarded due to FIFO overrun.
      * @return true or false
      */
@@ -2421,7 +2498,7 @@ public:
 
     /**
      * @ingroup group16 RDS
-     * @brief Get the Num Rds Fifo Used 
+     * @brief Get the Num Rds Fifo Used
      * @details Return the number of RDS FIFO used
      * @return uint8_t Total RDS FIFO used
      */
@@ -2432,9 +2509,9 @@ public:
 
     /**
      * @ingroup group16 RDS
-     * @brief Sets the minimum number of RDS groups stored in the RDS FIFO before RDSRECV is set. 
+     * @brief Sets the minimum number of RDS groups stored in the RDS FIFO before RDSRECV is set.
      * @details Return the number of RDS FIFO used
-     * @param value from 0 to 25. Default value is 0. 
+     * @param value from 0 to 25. Default value is 0.
      */
     inline void setFifoCount(uint16_t value)
     {
@@ -2447,7 +2524,8 @@ public:
      * @see resetEndIndicatorGroupA
      * @return true or false
      */
-    inline bool getEndIndicatorGroupA() {
+    inline bool getEndIndicatorGroupA()
+    {
         return rdsEndGroupA;
     }
 
@@ -2456,7 +2534,8 @@ public:
      * @brief Resets 0xD or 0xA special characters condition (makes it false)
      * @see getEndIndicatorGroupA
      */
-    inline void resetEndIndicatorGroupA() {
+    inline void resetEndIndicatorGroupA()
+    {
         rdsEndGroupA = false;
     }
 
@@ -2482,14 +2561,14 @@ public:
     }
 
     /**
-     * @ingroup group16 RDS status 
-     * 
+     * @ingroup group16 RDS status
+     *
      * @brief Gets RDS Status.
-     * 
+     *
      * @details Same result of calling getRdsStatus(0,0,0).
-     * @details Please, call getRdsStatus(uint8_t INTACK, uint8_t MTFIFO, uint8_t STATUSONLY) instead getRdsStatus() 
-     * if you want other behaviour. 
-     * 
+     * @details Please, call getRdsStatus(uint8_t INTACK, uint8_t MTFIFO, uint8_t STATUSONLY) instead getRdsStatus()
+     * if you want other behaviour.
+     *
      * @see SI4735::getRdsStatus(uint8_t INTACK, uint8_t MTFIFO, uint8_t STATUSONLY)
      */
     inline void getRdsStatus()
@@ -2498,7 +2577,7 @@ public:
     }
 
     /**
-     * @ingroup group16 RDS status 
+     * @ingroup group16 RDS status
      * @brief Empty FIFO
      * @details  Clear RDS Receive FIFO.
      * @see getRdsStatus
@@ -2509,7 +2588,7 @@ public:
     }
 
     /**
-     * @ingroup group16 RDS status 
+     * @ingroup group16 RDS status
      * @brief Clears RDSINT.
      * @details  INTACK Interrupt Acknowledge; 0 = RDSINT status preserved. 1 = Clears RDSINT.
      * @see getRdsStatus
@@ -2531,11 +2610,41 @@ public:
     char *getRdsText0A(void); // Gets the Station name
     char *getRdsText2A(void); // Gets the Radio Text
     char *getRdsText2B(void);
+    bool getRdsAllData(char **stationName, char **stationInformation, char **programInformation, char **utcTime);
+
+    /**
+     * @ingroup group16
+     * @brief Gets the Station Name
+     * @details Alias for getRdsText0A
+     * @details ATTENTION: You must call getRdsReady before calling this function.
+     * @return char* should return a string with the station name. However, some stations send other kind of messages
+     * @see getRdsText0A
+     */
+    inline char *getRdsStationName(void) { return getRdsText0A(); };
+
+    /**
+     * @ingroup group16
+     * @brief Gets the Program Information (RT - Radio Text)
+     * @details Process the program information data. Same getRdsText2A(). It is a alias for getRdsText2A.
+     * @details ATTENTION: You must call getRdsReady before calling this function.
+     * @return char array with the program information (63 bytes)
+     * @see getRdsText2A
+     */
+    inline char *getRdsProgramInformation(void) { return getRdsText2A(); };
+
+    /**
+     * @ingroup group16
+     * @brief Gets the Station Information.
+     * @details ATTENTION: You must call getRdsReady before calling this function.
+     * @return char array with the Text of Station Information (33 bytes)
+     * @see getRdsReady
+     */
+    inline char *getRdsStationInformation(void) { return getRdsText2B(); };
 
     void mjdConverter(uint32_t mjd, uint32_t *year, uint32_t *month, uint32_t *day);
     char *getRdsTime(void);
     char *getRdsDateTime(void);
-    bool getRdsDateTime(uint16_t *year, uint16_t *month, uint16_t *day, uint16_t *hour, uint16_t * minute);
+    bool getRdsDateTime(uint16_t *year, uint16_t *month, uint16_t *day, uint16_t *hour, uint16_t *minute);
 
     void getNext2Block(char *);
     void getNext4Block(char *);
@@ -2552,7 +2661,7 @@ public:
      * @ingroup group17 Patch and SSB support
      * @deprecated Use setSSBSidebandCutoffFilter instead.
      * @see setSSBSidebandCutoffFilter
-     * @param SBCUTFLT 
+     * @param SBCUTFLT
      */
     void inline setSBBSidebandCutoffFilter(uint8_t SBCUTFLT) { setSSBSidebandCutoffFilter(SBCUTFLT); }; // Wrong name! will be removed later.
 
@@ -2576,13 +2685,13 @@ public:
     void ssbPowerUp();
 
     /**
-     * @ingroup group06 Si47XX device Power Up 
-     * @brief Set the Max Delay Power Up 
+     * @ingroup group06 Si47XX device Power Up
+     * @brief Set the Max Delay Power Up
      * @details Sets the delay needed in ms after a powerup command (default is 10ms).
      * @details Some crystal oscillator might need more time to become stable (500 ms is the recommended).
-     * @details Low values make the load SSB patch faster. However, it can make the system unstable.   
-     * 
-     * @see MAX_DELAY_AFTER_POWERUP  
+     * @details Low values make the load SSB patch faster. However, it can make the system unstable.
+     *
+     * @see MAX_DELAY_AFTER_POWERUP
      * @param ms delay in ms
      */
     inline void setMaxDelayPowerUp(uint16_t ms)
@@ -2592,26 +2701,26 @@ public:
 
     /**
      * @ingroup   group08 Tune Frequency
-     * @brief Set the Max Delay after Set Frequency 
-     * 
+     * @brief Set the Max Delay after Set Frequency
+     *
      * @details After the set frequency command, the system need a time to get ready to the next set frequency (default value 30ms).
-     * @details Why the waitToSend() does not work in this case? No idea for while! 
-     * @details A low value makes the getFrequency command inaccurate. 
-     * 
+     * @details Why the waitToSend() does not work in this case? No idea for while!
+     * @details A low value makes the getFrequency command inaccurate.
+     *
      * @see  MAX_DELAY_AFTER_POWERUP
-     * @param ms 
+     * @param ms
      */
     inline void setMaxDelaySetFrequency(uint16_t ms)
     {
         this->maxDelaySetFrequency = ms;
     }
 
-    /** 
+    /**
      * @ingroup group08 Tune Frequency step
-     * 
-     * @brief Sets the current step value. 
-     * 
-     * @details This function does not check the limits of the current band. Please, don't take a step bigger than your legs.
+     *
+     * @brief Sets the current step value.
+     *
+     * @details This function does not check the limits of the current band. Do not take a step that will extend past the limit of the band.
      * @details Example:
      * @code
      * setFM(6400,10800,10390,10);
@@ -2619,17 +2728,17 @@ public:
      * .
      * .
      * .
-     * setAM(7000,7600,7100,5); 
-     * setFrequencyStep(1); // the step will be 1kHz (you are usin AM or SSB mode)  
-     * @endcode 
-     * 
+     * setAM(7000,7600,7100,5);
+     * setFrequencyStep(1); // the step will be 1kHz (you are usin AM or SSB mode)
+     * @endcode
+     *
      * @see setFM()
      * @see setAM()
      * @see setSSB()
-     * 
+     *
      * @param step if you are using FM, 10 means 100kHz. If you are using AM 10 means 10kHz
      *             For AM, 1 (1kHz) to 1000 (1MHz) are valid values.
-     *             For FM 5 (50kHz), 10 (100kHz) and 100 (1MHz) are valid values.  
+     *             For FM 5 (50kHz), 10 (100kHz) and 100 (1MHz) are valid values.
      */
     inline void setFrequencyStep(uint16_t step)
     {
@@ -2637,14 +2746,14 @@ public:
     }
 
     /**
-     * @ingroup group08 Frequency 
-     * 
-     * @brief Gets the current frequency saved in memory. 
-     * 
-     * @details Unlike getFrequency, this method gets the current frequency recorded after the last setFrequency command. 
+     * @ingroup group08 Frequency
+     *
+     * @brief Gets the current frequency saved in memory.
+     *
+     * @details Unlike getFrequency, this method gets the current frequency recorded after the last setFrequency command.
      * @details This method avoids bus traffic and CI processing.
      * @details However, you can not get others status information like RSSI.
-     * 
+     *
      * @see getFrequency()
      */
     inline uint16_t getCurrentFrequency()
@@ -2653,8 +2762,8 @@ public:
     }
 
     /**
-     * @ingroup group08 Si47XX device Status 
-     * 
+     * @ingroup group08 Si47XX device Status
+     *
      * @brief Gets the current status  of the Si47XX (AM, FM or SSB)
      * @see Si47XX PROGRAMMING GUIDE; AN332 (REV 1.0); pages 73 (FM) and 139 (AM)
      */
@@ -2667,14 +2776,14 @@ public:
     int16_t getDeviceI2CAddress(uint8_t resetPin);
     void setDeviceOtherI2CAddress(uint8_t i2cAddr);
 
-    /******************************************************************************* 
-     * The functions below modify the clock frequency for I2C communication. 
+    /*******************************************************************************
+     * The functions below modify the clock frequency for I2C communication.
      * 100kHz  is usually the baseline.
-     * Use one of these funcition if you have problem on you default configuration. 
+     * Use one of these funcition if you have a problem on the default configuration.
      *******************************************************************************/
 
     /**
-     * @ingroup group18 MCU I2C Speed 
+     * @ingroup group18 MCU I2C Speed
      * @brief Sets I2C bus to 10kHz
      */
     inline void setI2CLowSpeedMode(void)
@@ -2683,15 +2792,15 @@ public:
     };
 
     /**
-     * @ingroup group18 MCU I2C Speed  
-     * 
+     * @ingroup group18 MCU I2C Speed
+     *
      * @brief Sets I2C bus to 100kHz
      */
     inline void setI2CStandardMode(void) { Wire.setClock(100000); };
 
     /**
-     * @ingroup group18 MCU I2C Speed 
-     * 
+     * @ingroup group18 MCU I2C Speed
+     *
      * @brief Sets I2C bus to 400kHz
      */
     inline void setI2CFastMode(void)
@@ -2700,27 +2809,27 @@ public:
     };
 
     /**
-     * @ingroup group18 MCU I2C Speed  
-     * 
+     * @ingroup group18 MCU I2C Speed
+     *
      * @brief Sets the I2C bus to a given value.
-     * ATTENTION: use this function with cation
-     * 
+     * ATTENTION: use this function with caution
+     *
      * @param value in Hz. For example: The values 500000 sets the bus to 500kHz.
      */
     inline void setI2CFastModeCustom(long value = 500000) { Wire.setClock(value); };
 
     /**
-     * @ingroup group18 MCU External Audio Mute  
-     * 
+     * @ingroup group18 MCU External Audio Mute
+     *
      * @brief Sets the Audio Mute Mcu Pin
      * @details This function sets the mcu digital pin you want to use to control the external audio mute circuit.
-     * @details Some users may be uncomfortable with the loud popping of the speaker during some transitions caused by some SI47XX commands.  
-     * @details This problem occurs during the transition from the power down to power up. 
-     * @details Every time the user changes the mode (FM to AM or AM to FM) the power down and power up commands are required by the Si47XX devices.
-     * @details If you have a extra circuit in your receiver to mute the audio on amplifier input, you can configure a MCU pin to control it by using this function.
-     * 
+     * @details Some users may be uncomfortable with the loud popping of the speaker during some transitions caused by some SI47XX commands.
+     * @details This problem occurs during the transition from the power down to power up.
+     * @details For example, when the user changes bands (FM to AM or AM to FM), the Si47XX devices must be powered down and powered up again.
+     * @details If you have a mute circuit attached to a pin on teh MCU, then you can control the mute circuit from the MCU with this function.
+     *
      * @see setHardwareAudioMute
-     * @param pin if 0 ou greater sets the MCU digital pin will be used to control de external circuit.  
+     * @param pin if 0 or greater, sets the MCU digital pin that controls the external circuit.
      */
     inline void setAudioMuteMcuPin(int8_t pin)
     {
@@ -2729,13 +2838,13 @@ public:
     };
 
     /**
-     * @ingroup group18 MCU External Audio Mute 
-     * 
+     * @ingroup group18 MCU External Audio Mute
+     *
      * @brief Sets the Hardware Audio Mute
      * @details Turns the Hardware audio mute on or off
-     * 
+     *
      * @see setAudioMuteMcuPin
-     * 
+     *
      * @param on  True or false
      */
     inline void setHardwareAudioMute(bool on)
@@ -2744,6 +2853,7 @@ public:
         delayMicroseconds(300);
     }
 
-    void convertToChar(uint16_t value, char *strValue, uint8_t len, uint8_t dot, uint8_t separator, bool remove_leading_zeros = true );
+    void convertToChar(uint16_t value, char *strValue, uint8_t len, uint8_t dot, uint8_t separator, bool remove_leading_zeros = true);
+    void removeUnwantedChar(char *str, int size);
 };
 #endif // _SI4735_H
