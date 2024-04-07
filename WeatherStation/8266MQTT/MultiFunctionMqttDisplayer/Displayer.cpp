@@ -253,7 +253,7 @@ Displayer::Displayer() {
   _leilongTemperature = 0;
 }
 void Displayer::init() {
-  _displayer = new SSD1306Wire(0x3c, SCL, SDA);
+  _displayer = new SSD1306Wire(0x3c, D2, D1);
   _displayer->init();
   _displayer->flipScreenVertically();
   _displayer->setFont(ArialMT_Plain_10);
