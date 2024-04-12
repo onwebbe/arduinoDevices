@@ -92,6 +92,8 @@ void HAMqttServoGoAndBack::loop() {
     } else {
       if((current - _stepTime) > 600 || (current - _stepTime) < 0) {
         _servo->write(_startAngle);
+      }
+      if ((current - _stepTime) > 1100 || (current - _stepTime) < 0) {
         _isGo = true;
         _isOn = false;
         Serial.println("+++++++++++++++back");
@@ -109,6 +111,8 @@ void HAMqttServoGoAndBack::setup() {
   _servo = new Servo();
   _servo->attach(_pin);
   _servo->write(_startAngle);
+  delay(1000);
+  _servo->detach();
   Serial.println("Initialing:");
   Serial.print("default value:");
   Serial.println(_isOn);

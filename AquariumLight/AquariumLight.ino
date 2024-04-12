@@ -14,7 +14,7 @@
 
 // #define DEVICE_NAME "AquariumLight-test"
 // #define CLIENT_ID "AquariumLight-2"
-#define CLIENT_ID "AquariumLight-4"
+#define CLIENT_ID "AquariumLight-servo"
 #define CLIENT_PASSWORD "AquariumLight_123456"
 
 #define LIGHT_PIN 13
@@ -56,6 +56,7 @@ int temperatureTemp[100];
 
 void setup() {
   Serial.begin(115200);
+  analogWriteFreq(40000);
   Serial.println("start");
   for(int i = 0; i < 100; i++) {
     temperatureTemp[i] = 0;
@@ -74,8 +75,8 @@ void setup() {
   aqLight.setup();
   feeder.setup();
   feeder.setDelayTime(400);
-  feeder.setStartAngle(0);
-  feeder.setEndAngle(180);
+  feeder.setStartAngle(180);
+  feeder.setEndAngle(30);
   aqTemperature.setup();
 
   wm.setDeviceName(DEVICE_NAME);
