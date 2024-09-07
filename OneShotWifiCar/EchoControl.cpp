@@ -1,15 +1,14 @@
 #include <Adafruit_PCF8574.h>
 #include "EchoControl.h"
 
-EchoControl::EchoControl(int trigPin, int echoPin) {
-  init(trigPin, echoPin);
+EchoControl::EchoControl(Adafruit_PCF8574 *pcf, int trigPin, int echoPin) {
+  init(pcf, trigPin, echoPin);
 }
 
-void EchoControl::init(int trigPin, int echoPin) {
+void EchoControl::init(Adafruit_PCF8574 *pcf, int trigPin, int echoPin) {
   _trigPin = trigPin;
   _echoPin = echoPin;
-  _pcf = new Adafruit_PCF8574();
-  _pcf->begin(0x20, &Wire);
+  _pcf = pcf;
 }
 
 void EchoControl::setup() {

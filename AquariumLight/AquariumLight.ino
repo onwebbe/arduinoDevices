@@ -6,15 +6,19 @@
 #include "HAMqttServoGoAndBack.h"
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
+#include <OneButton.h>
 
-// #define DEVICE_NAME "AquariumLight-30551c38"
+// #define DEVICE_NAME "AquariumLight-30551c38x"
 // #define DEVICE_NAME "AquariumLight-d32016a7"
-#define DEVICE_NAME "AquariumLight-servo"  // test
+// #define DEVICE_NAME "AquariumLight-servo"  // test
+// #define DEVICE_NAME "AquariumLight-42c07296"  // 雷龙与缸灯
+// #define DEVICE_NAME "AquariumLight-a511f8a7"  // 老小鱼缸灯
+#define DEVICE_NAME "AquariumLight-d003885a"  // 小鱼缸灯v2.3
 
 
 // #define DEVICE_NAME "AquariumLight-test"
-// #define CLIENT_ID "AquariumLight-2"
-#define CLIENT_ID "AquariumLight-servo"
+// #define CLIENT_ID "AquariumLight-d32016a7x"
+#define CLIENT_ID "AquariumLight-d003885a"
 #define CLIENT_PASSWORD "AquariumLight_123456"
 
 #define LIGHT_PIN 13
@@ -39,7 +43,7 @@ HAMqttSensorConfig* temperatureConfig = new HAMqttSensorConfig("°C", "temperatu
 HAMqttLight aqLight(client, LIGHT_PIN, "light", DEVICE_NAME, "homedevice/log");
 HAMqttLight aqPumb(client, PUMB_PIN, "pumb", DEVICE_NAME, "homedevice/log");
 
-double Rs = 200000;//R1取值为150k
+double Rs = 170000;//R1取值为150k
 double Vcc = 3.3;
 double temperatureValue[242];
 double rValue[242];
@@ -56,6 +60,7 @@ int temperatureTemp[100];
 
 void setup() {
   Serial.begin(115200);
+
   analogWriteFreq(40000);
   Serial.println("start");
   for(int i = 0; i < 100; i++) {
@@ -157,7 +162,11 @@ void reconnectMqtt() {
   feeder.publishDiscover();
   feeder.publishServoGoBackStatus();
 
-  
+  // No need to restore status for heater to prevent boring the water
+  // heater.restoreStatus();
+  aqLight.restoreStatus();
+  aqPumb.restoreStatus();
+  feeder.restoreStatus();
 }
 void callback(char* topic, byte* payload, unsigned int length) {
   String topicString(topic);
@@ -206,6 +215,11 @@ void loop() {
     aqLight.afterRconnected();
     aqPumb.afterRconnected();
     feeder.afterRconnected();
+
+    // heater.restoreStatus();
+    // aqLight.restoreStatus();
+    // aqPumb.restoreStatus();
+    // feeder.restoreStatus();
   }
   client->loop();
   heater.loop();

@@ -42,5 +42,8 @@ class HAMqttServoGoAndBack : public HAMqttDeviceBase {
     void setDelayTime(int time);
     void setStartAngle(int angle);
     void setEndAngle(int angle);
+    
+    String getStatusString();
+    void restoreStatus();
 };
 #endif

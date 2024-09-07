@@ -32,6 +32,9 @@ class HAMqttSwitch : public HAMqttDeviceBase {
     void publishSwitchStatus();
     void setDelaySwichOff(int delayMillis);
     bool isSwitchOn();
+  
+    String getStatusString();
+    void restoreStatus();
 
 };
 #endif

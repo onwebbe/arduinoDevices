@@ -3,14 +3,15 @@
 #include "EchoControl.h"
 #include "Arduino.h"
 
-CarRadar::CarRadar(int trigPin, int echoPin, int servoPin) {
-  init(trigPin, echoPin, servoPin);
+CarRadar::CarRadar(Adafruit_PCF8574 *pcf, int trigPin, int echoPin, int servoPin) {
+  init(pcf, trigPin, echoPin, servoPin);
 }
-void CarRadar::init(int trigPin, int echoPin, int servoPin) {
+void CarRadar::init(Adafruit_PCF8574 *pcf, int trigPin, int echoPin, int servoPin) {
   _radarData = new float[18];
   _trigPin = trigPin;
   _echoPin = echoPin;
   _servoPin = servoPin;
+  _pcf = pcf;
 
   int freq = 50;      // 频率(20ms周期)
   int channel = 8;    // 通道(高速通道（0 ~ 7）由80MHz时钟驱动，低速通道（8 ~ 15）由 1MHz 时钟驱动。)
@@ -19,7 +20,7 @@ void CarRadar::init(int trigPin, int echoPin, int servoPin) {
   ledcSetup(channel, freq, resolution);
   ledcAttachPin(_servoPin, channel);
 
-  _echo = new EchoControl(_trigPin, _echoPin);
+  _echo = new EchoControl(_pcf, _trigPin, _echoPin);
 
   _lastTime = millis();
 }

@@ -17,6 +17,8 @@ void setup() {
   // 初始化调试串口波特率
 
   Serial.begin(115200);
+  Serial.println(SDA);
+  Serial.println(SCL);
   
   pinMode(RESET_PIN, OUTPUT);
   digitalWrite(RESET_PIN, HIGH);
@@ -24,6 +26,7 @@ void setup() {
 }
 
  
+
 
 void loop() {
 

@@ -40,6 +40,7 @@ void HAMqttSwitch::callback(String topicString, String payloadString) {
     }
     Serial.print("callback-switch-Set pin");
     Serial.println(_isOn?"ON":"OFF");
+    saveStatus();
     publishSwitchStatus();
   } else if (topicString.equals(_deviceCommandChannel_from_server)) {
     if (payloadString.equals("getStatus")) {
@@ -143,4 +144,27 @@ void HAMqttSwitch::setDelaySwichOff(int delayMillis) {
 
 bool HAMqttSwitch::isSwitchOn() {
   return _isOn;
+}
+
+String HAMqttSwitch::getStatusString() {
+  return String(_isOn);
+}
+
+void HAMqttSwitch::restoreStatus() {
+  String statusString = getSavedStatus();
+  if (statusString.length() > 0) {
+    String isOnString = statusString;
+    boolean isOn = (boolean)isOnString.toInt();
+    _isOn = isOn;
+    if (isOn) {
+      if (_delaySwitchOff > 0)
+        _delayStart = millis();
+      digitalWrite(_pin, HIGH);
+    } else {
+      if (_delaySwitchOff > 0)
+        _delayStart = -1;
+      digitalWrite(_pin, LOW);
+    }
+    publishSwitchStatus();
+  }
 }

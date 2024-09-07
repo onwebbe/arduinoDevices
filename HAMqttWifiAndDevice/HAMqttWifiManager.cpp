@@ -69,7 +69,7 @@ bool HAMqttWifiManager::initFromFile() {
   Serial.println("end start littleFS");
 
   delay(10);
-  SPIFFS.end();
+  // SPIFFS.end();
   return hasFile;
 } 
 void HAMqttWifiManager::setup() {

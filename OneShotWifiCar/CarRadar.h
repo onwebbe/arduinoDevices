@@ -17,12 +17,12 @@ class CarRadar {
     int _timeGap = 100;
     long _lastTime;
 
-    void init(int trigPin, int echoPin, int servoPin);
+    void init(Adafruit_PCF8574 *pcf, int trigPin, int echoPin, int servoPin);
     int calculatePWM(int degree);
     void scan(int angle);
 
   public:
-    CarRadar(int trigPin, int echoPin, int servoPin);
+    CarRadar(Adafruit_PCF8574 *pcf, int trigPin, int echoPin, int servoPin);
     void setup();
     void loop();
 };

@@ -34,26 +34,42 @@
 #include "PCF8575.h"  // https://github.com/xreef/PCF8575_library
 
 // Set i2c address
-PCF8575 pcf8575(0x20);
+PCF8575 pcf8575(0x26);
 
 void setup()
 {
   Serial.begin(115200);
   Serial.println("start");
-  pcf8575.pinMode(1, OUTPUT);
-  pcf8575.begin();
-  pcf8575.pinMode(1, OUTPUT);
+  pcf8575.pinMode(P2, OUTPUT, HIGH);
+  while(!pcf8575.begin()) {
+    Serial.print(".");
+    delay(100);
+  }
+  Serial.println();
+  Serial.println("pcf started success");
   Serial.println("pcf8575 begin");
+  
 }
 
 void loop()
 {
   Serial.println("pcf8575 loop begin");
+  pcf8575.digitalWrite(P2, HIGH);
+  Serial.print("isTrxSuccess:");
+  Serial.println(pcf8575.isLastTransmissionSuccess());
   Serial.println("HIGH");
-  pcf8575.digitalWrite(1, HIGH);
   delay(5000);
+  Serial.print("read P2:");
+  Serial.println(pcf8575.digitalRead(P2));
+  delay(5000);
+  pcf8575.digitalWrite(P2, LOW);
+  Serial.print("isTrxSuccess:");
+  Serial.println(pcf8575.isLastTransmissionSuccess());
   Serial.println("LOW");
-  pcf8575.digitalWrite(1, LOW);
+  delay(5000);
+  Serial.print("read P2:");
+  Serial.println(pcf8575.digitalRead(P2));
   delay(5000);
   Serial.println("pcf8575 loop end");
+  
 }

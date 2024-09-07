@@ -22,13 +22,14 @@ class DriverControl {
 
     int _maxSpeedNum = 255;
 
-    void init(int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight, int maxSpeedNum);
+    
 
     Adafruit_PCF8574 *_pcf;
   public:
-    DriverControl(int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight);
-    DriverControl(int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight, int maxSpeedNum);
-
+    DriverControl(Adafruit_PCF8574 *pcf);
+    DriverControl(Adafruit_PCF8574 *pcf, int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight);
+    DriverControl(Adafruit_PCF8574 *pcf, int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight, int maxSpeedNum);
+    void init(Adafruit_PCF8574 *pcf, int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight, int maxSpeedNum);
     void setup();
     void setLeftAPCF(bool isPCF);
     void setLeftBPCF(bool isPCF);

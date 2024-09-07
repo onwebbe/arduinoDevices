@@ -1,15 +1,19 @@
 #include <Adafruit_PCF8574.h>
 #include "DriverControl.h"
-
+#include <analogWrite.h>
+// Adafruit_PCF8574 pcf;
 // LM298
-DriverControl::DriverControl(int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight) {
-  init(leftA, leftB, rightA, rightB, enLeft, enRight, _maxSpeedNum);
+DriverControl::DriverControl(Adafruit_PCF8574 *pcf) {
+  _pcf = pcf;
 }
-DriverControl::DriverControl(int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight, int maxSpeedNum) {
-  init(leftA, leftB, rightA, rightB, enLeft, enRight, maxSpeedNum);
+DriverControl::DriverControl(Adafruit_PCF8574 *pcf, int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight) {
+  init(pcf, leftA, leftB, rightA, rightB, enLeft, enRight, _maxSpeedNum);
+}
+DriverControl::DriverControl(Adafruit_PCF8574 *pcf, int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight, int maxSpeedNum) {
+  init(pcf, leftA, leftB, rightA, rightB, enLeft, enRight, maxSpeedNum);
 }
 
-void DriverControl::init(int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight, int maxSpeedNum) {
+void DriverControl::init(Adafruit_PCF8574 *pcf, int leftA, int leftB, int rightA, int rightB, int enLeft, int enRight, int maxSpeedNum) {
   _leftPinA = leftA;
   _leftPinB = leftB;
   _rightPinA = rightA;
@@ -17,8 +21,7 @@ void DriverControl::init(int leftA, int leftB, int rightA, int rightB, int enLef
   _enLeft = enLeft;
   _enRight = enRight;
   _maxSpeedNum = maxSpeedNum;
-  _pcf = new Adafruit_PCF8574();
-  _pcf->begin(0x20, &Wire);
+  _pcf = pcf;
 }
 void DriverControl::setup() {
   if (_leftPinAPCF) {
@@ -76,13 +79,18 @@ void DriverControl::goStaight(int speed) {
   if (_enLeftPCF) {
     
   } else {
-    analogWrite(_enLeft, speed);
+    digitalWrite(_enLeft, HIGH);
+    // analogWrite(_enLeft, speed);
   }
   if (_enRightPCF) {
     
   } else {
-    analogWrite(_enRight, speed);
+    digitalWrite(_enRight, HIGH);
+    //analogWrite(_enRight, speed);
   }
+
+  // Serial.println("HIGH");
+  // _pcf->digitalWrite(2, HIGH);
 }
 void DriverControl::goBack(int speed) {
   if (_leftPinAPCF) {
@@ -108,13 +116,16 @@ void DriverControl::goBack(int speed) {
   if (_enLeftPCF) {
 
   } else {
-    analogWrite(_enLeft, speed);
+    digitalWrite(_enLeft, HIGH);
   }
   if (_enRightPCF) {
     
   } else {
-    analogWrite(_enRight, speed);
+    digitalWrite(_enRight, HIGH);
   }
+ 
+  // Serial.println("LOW");
+  // _pcf->digitalWrite(2, LOW);
 }
 void DriverControl::turnLeft(int speed) {
   if (_leftPinAPCF) {
@@ -128,9 +139,9 @@ void DriverControl::turnLeft(int speed) {
     digitalWrite(_leftPinB, LOW);
   }
   if (_rightPinAPCF) {
-    _pcf->digitalWrite(_rightPinA, LOW);
+    _pcf->digitalWrite(_rightPinA, HIGH);
   } else {
-    digitalWrite(_rightPinA, LOW);
+    digitalWrite(_rightPinA, HIGH);
   }
   if (_rightPinBPCF) {
     _pcf->digitalWrite(_rightPinB, HIGH);
@@ -150,9 +161,9 @@ void DriverControl::turnLeft(int speed) {
 }
 void DriverControl::turnRight(int speed) {
   if (_leftPinAPCF) {
-    _pcf->digitalWrite(_leftPinA, LOW);
+    _pcf->digitalWrite(_leftPinA, HIGH);
   } else {
-    digitalWrite(_leftPinA, LOW);
+    digitalWrite(_leftPinA, HIGH);
   }
   if (_leftPinBPCF) {
     _pcf->digitalWrite(_leftPinB, HIGH);

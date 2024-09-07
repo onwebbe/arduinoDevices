@@ -34,6 +34,7 @@ void HAMqttServoGoAndBack::callback(String topicString, String payloadString) {
     }
     Serial.print("callback-switch-Set pin");
     Serial.println(_isOn?"ON":"OFF");
+    saveStatus();
     publishServoGoBackStatus();
   } else if (topicString.equals(_deviceCommandChannel_from_server)) {
     if (payloadString.equals("getStatus")) {
@@ -148,4 +149,18 @@ void HAMqttServoGoAndBack::setStartAngle(int angle) {
 
 void HAMqttServoGoAndBack::setEndAngle(int angle) {
   _endAngle = angle;
+}
+
+String HAMqttServoGoAndBack::getStatusString() {
+  return String(_isOn);
+}
+
+void HAMqttServoGoAndBack::restoreStatus() {
+  String statusString = getSavedStatus();
+  if (statusString.length() > 0) {
+    String isOnString = statusString;
+    boolean isOn = (boolean)isOnString.toInt();
+    _servo->write(_startAngle);
+    publishServoGoBackStatus();
+  }
 }

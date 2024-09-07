@@ -1,15 +1,15 @@
+#include <time.h>
+#include <chrono>
 #include "compatibility.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 long long mtime, seconds, useconds;
 //static struct timeval start, end;
 //struct timespec start, end;
-#include <time.h>
-#include <chrono>
-/**********************************************************************/
-/**
- * This function is added in order to simulate arduino delay() function
- * @param milisec
- */
+
 void __msleep(int milisec)
 {
     struct timespec req; // = {0};
@@ -23,7 +23,7 @@ void __usleep(int microsec)
 {
     struct timespec req; // = {0};
     req.tv_sec = (time_t)microsec / 1000000;
-    req.tv_nsec = (microsec / 1000000) * 1000;
+    req.tv_nsec = (microsec % 1000000) * 1000;
     //nanosleep(&req, (struct timespec *)NULL);
     clock_nanosleep(CLOCK_REALTIME, 0, &req, NULL);
 }
@@ -46,3 +46,7 @@ uint32_t __millis()
 
     return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 }
+
+#ifdef __cplusplus
+}
+#endif

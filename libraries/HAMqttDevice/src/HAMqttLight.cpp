@@ -48,6 +48,7 @@ void HAMqttLight::callback(String topicString, String payloadString) {
     Serial.print("callback-switch-Set pin to ");
     Serial.println(_brightness);
     log(INFO, "callback-switch-Set pin to " + _brightness);
+    saveStatus();
     publishSwitchStatus();
     publishBrightStatus();
   } else if (topicString.equals(_deviceBrightCommandChannel_from_server)) {
@@ -67,6 +68,7 @@ void HAMqttLight::callback(String topicString, String payloadString) {
     }
     analogWrite(_pin, _brightness);
     log(INFO, "callback-brightness-Set pin to " + _brightness);
+    saveStatus();
     publishBrightStatus();
   } else if (topicString.equals(_deviceCommandChannel_from_server)) {
     if (payloadString.equals("getStatus")) {
@@ -184,4 +186,40 @@ int HAMqttLight::getBrightness() {
 }
 bool HAMqttLight::isSwitchOn() {
   return _isOn;
+}
+
+String HAMqttLight::getStatusString() {
+  String statusString = "";
+  String switchString = "";
+  if (_isOn) {
+    switchString = "1";
+  } else {
+    switchString = "0";
+  }
+  return switchString + "," + String(_brightness);
+}
+
+void HAMqttLight::restoreStatus() {
+  String statusString = getSavedStatus();
+  if (statusString.length() > 0) {
+    String splited[2];
+    split(statusString, ",", splited);
+    String isOnString = splited[0];
+    String brightnessString = splited[1];
+    boolean isOn = (boolean)isOnString.toInt();
+    int brightness = brightnessString.toInt();
+    _isOn = isOn;
+    _brightness = brightness;
+    if (isOn) {
+      if (_delaySwitchOff > 0)
+        _delayStart = millis();
+      analogWrite(_pin, brightness);
+    } else {
+      if (_delaySwitchOff > 0)
+        _delayStart = -1;
+      digitalWrite(_pin, LOW);
+    }
+    publishSwitchStatus();
+    publishBrightStatus();
+  }
 }

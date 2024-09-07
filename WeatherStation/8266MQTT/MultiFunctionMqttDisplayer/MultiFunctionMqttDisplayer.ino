@@ -15,17 +15,17 @@
 #define WEATHER_CHANNEL "homedevice/sensor/WeatherStationSensor/data"
 #define WEATHER_RAIN_CHANNEL "homedevice/binary_sensor/WeatherStationSensor/data"
 
-#define YUGANG1_STATUS_CHANNEL "homedevice/sensor/AquariumLight-30551c38.aquariumStatus/text/status"
+#define YUGANG1_STATUS_CHANNEL "homedevice/sensor/AquariumLight-d003885a.aquariumStatus/text/status"
 #define YUGANG1_COMMAND_CHANNEL "homedevice/yugang4/command"
 
-#define YUGANG2_STATUS_CHANNEL "homedevice/yugang7/status"
+#define YUGANG2_STATUS_CHANNEL "homedevice/sensor/AquariumLight-42c07296.aquariumStatus/text/status"
 #define YUGANG2_COMMAND_CHANNEL "homedevice/yugang7/command"
 
-#define YUGANG1_STATUS_LIGHT_CHANNEL "homedevice/light/AquariumLight-30551c38-light/brightness/status"
-#define YUGANG1_STATUS_LIGHT_SWITCH_CHANNEL "homedevice/light/AquariumLight-30551c38-light/light/status"
-#define YUGANG1_STATUS_PUMB_CHANNEL "homedevice/light/AquariumLight-30551c38-pumb/brightness/status"
-#define YUGANG1_STATUS_HEAT_CHANNEL "homedevice/switch/AquariumLight-30551c38-heater/switch/status"
-#define YUGANG1_STATUS_TEMP_CHANNEL "homedevice/sensor/AquariumLight-30551c38.aquariumTemperature/sensor/status"
+#define YUGANG1_STATUS_LIGHT_CHANNEL "homedevice/light/AquariumLight-42c07296-light/brightness/status"
+#define YUGANG1_STATUS_LIGHT_SWITCH_CHANNEL "homedevice/light/AquariumLight-42c07296-light/light/status"
+#define YUGANG1_STATUS_PUMB_CHANNEL "homedevice/light/AquariumLight-42c07296-pumb/brightness/status"
+#define YUGANG1_STATUS_HEAT_CHANNEL "homedevice/switch/AquariumLight-42c07296-heater/switch/status"
+#define YUGANG1_STATUS_TEMP_CHANNEL "homedevice/sensor/AquariumLight-42c07296.aquariumTemperature/sensor/status"
 
 #define YUGANG2_STATUS_LIGHT_CHANNEL "homedevice/light/yugang7/lightbrightness/status"
 #define YUGANG2_STATUS_LIGHT_SWITCH_CHANNEL "homedevice/light/yugang7/light/switch"

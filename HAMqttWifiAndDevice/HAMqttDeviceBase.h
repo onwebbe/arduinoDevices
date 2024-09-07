@@ -25,6 +25,8 @@ class HAMqttDeviceBase {
 
     int _debugLevel = 1; // 0 - nodebug 1 - error   2 - info    3 - debug
 
+    String _deviceStatusFileName;
+
   public:
     HAMqttDeviceBase(PubSubClient* client, String type, String deviceName, String logChannel);
     HAMqttDeviceBase(PubSubClient* client, String type, String deviceName, String haDeviceName, String logChannel);
@@ -40,8 +42,16 @@ class HAMqttDeviceBase {
     void setDebugLevel(int debugLevel);
     void setDiscoverTimeGap(long gap);
 
+    void saveStatus();
+    void restoreStatus();
   protected:
     void processCallbackCommandCommon(String topicString, String payloadString);
+
+    void restoreStatus(String statusString);
+    String getSavedStatus();
+    virtual String getStatusString();
+    void split(String zifuchuan,String fengefu,String result[]);
+
   public:
     const int ERROR = 1;
     const int INFO = 2;

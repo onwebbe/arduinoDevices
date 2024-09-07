@@ -38,5 +38,8 @@ class HAMqttLight : public HAMqttDeviceBase {
     int getBrightness();
     bool isSwitchOn();
     void setFullPowerBeforeLightChange(int time);
+
+    String getStatusString();
+    void restoreStatus();
 };
 #endif
