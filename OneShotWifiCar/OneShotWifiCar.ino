@@ -1,6 +1,10 @@
 #include "DriverControl.h"
 #include <analogWrite.h>
 #include <Adafruit_PCF8574.h>
+#include "CarRadar.h"
+
+// https://madhephaestus.github.io/ESP32Servo/annotated.html
+
 /* Example for 1 output LED that is connected from power to the GPIO expander pin #7
  * Note the LEDs must be connected with the CATHODES to the expander, to SINK current!
  * The PCF8574 cannot SOURCE current!
@@ -8,85 +12,98 @@
 
 Adafruit_PCF8574 pcf8574;
 DriverControl *driver;
-// PCF8574 ex1(0x20);
-void setup() {
-  // while (!Serial) {
-  //   delay(10);
-  // }
 
+long _lastTime;
+bool _isGo = true;
+int _timeGap = 300;
+int _currentAngle = 0;
+int _servoPin = 13;
+Servo *_myservo;
+EchoControl *_echo;
+CarRadar *radar;
+
+void setup() {
   // 初始化调试串口波特率
   Serial.begin(115200);
-  pcf8574.begin(0x20, &Wire);
-  driver = new DriverControl(&pcf8574, 14, 2, 15, 3, 255, 255);
-  // DriverControl driver(14, 2, 15, 3, 255, 255);
-  // if (!pcf.begin(0x20, &Wire)) {
-  //   Serial.println("Couldn't find PCF8574");
-  // }
-  // driver.init(14, 2, 15, 3, 255, 255, 255);
-  Serial.println("found");
-  Serial.println(SDA);
-  Serial.println(SCL);
-  driver->setLeftAPCF(false);
-  driver->setLeftBPCF(true);
-  driver->setENLeftPCF(false);
-  driver->setRightAPCF(false);
-  driver->setRightBPCF(true);
-  driver->setENRightPCF(false);
-  driver->setup();
-  // pcf8574.pinMode(2, OUTPUT);
   Serial.println("----------Start----------");
-  
-  // if (!pcf.begin(0x20, &Wire)) {
+  Serial.print("SDA:");
+  Serial.println(SDA);
+  Serial.print("SCL:");
+  Serial.println(SCL);
+  _lastTime = millis();
+  // while (!pcf8574.begin(0x20, &Wire)) {
   //   Serial.println("Couldn't find PCF8574");
-  //   while (1);
+  //   delay(500);
   // }
-  // Serial.println("--------------------");
-  // pcf.pinMode(7, OUTPUT);
+  // Test Driver
+  // driver = new DriverControl(&pcf8574, 14, 2, 15, 3, -1, -1);
+  // Serial.println("found");
   
-  // pinMode(14, OUTPUT);
-  // pinMode(15, OUTPUT);
-  // pcf.pinMode(2, OUTPUT);
-  // pcf.pinMode(3, OUTPUT);
+  // driver->setLeftAPCF(false);
+  // driver->setLeftBPCF(true);
+  // driver->setENLeftPCF(false);
+
+  // driver->setRightAPCF(false);
+  // driver->setRightBPCF(true);
+  // driver->setENRightPCF(false);
+  // driver->setup();
+  // Serial.println("--------------------");
+
+
+  // Test Radar
+  // radar = new CarRadar(&pcf8574, 4, 16, 2);
+  // _myservo = new Servo();
+  // ESP32PWM::allocateTimer(0);
+	// ESP32PWM::allocateTimer(1);
+	// ESP32PWM::allocateTimer(2);
+	// ESP32PWM::allocateTimer(3);
+	// _myservo->setPeriodHertz(50);    // standard 50 hz servo
+	// _myservo->attach(_servoPin, 1000, 2000); // attaches the servo on pin 18 to the servo object
+  // _echo = new EchoControl(&pcf8574, 14, 15);
+  // _echo->setup();
+
+  radar = new CarRadar(&pcf8574, 4, 16, 2);
+  radar->setTrigPinAPCF(true);
+  // Serial.println("radar start");
 }
 
 void loop() {
-  // pcf8574->digitalWrite(2, HIGH);
-  // pcf.digitalWrite(0, HIGH);
-  // Serial.print("ON");
+  // Test Driver
+  // driver->goStaight(255);
   // delay(5000);
-  moveForward();
-  // delay(5000);
-  
-  // delay(5000);
-  driver->goStaight(255);
-  // pcf8574.digitalWrite(2, HIGH);
-  delay(5000);
-  moveBackward();
-  driver->goBack(255);
-  // pcf8574.digitalWrite(2, LOW);
-  delay(5000);
-  // driver->turnLeft(255);
+  // driver->goBack(255);
   // delay(5000);
   // driver->turnRight(255);
   // delay(5000);
-  // pcf.digitalWrite(7, LOW);  // turn LED on by sinking current to ground
-  // delay(100);
-  // pcf.digitalWrite(7, HIGH); // turn LED off by turning off sinking transistor
-  // delay(100);
-}
+  // driver->turnLeft(255);
+  // delay(5000);
 
+  // radar->loop();
+  // long currentTime = millis();
+  // if ((currentTime - _lastTime) > _timeGap || (currentTime - _lastTime) < 0) {
+  //   Serial.print("start angle: ");
+  //   Serial.println(_currentAngle);
+  //   _myservo->write(_currentAngle);
+  //   if (_isGo) {
+  //     _currentAngle += 10;
+  //     if (_currentAngle > 180) {
+  //       _currentAngle -= 20;
+  //       _isGo = false;
+  //     }
+  //   } else {
+  //     _currentAngle -= 10;
+  //     if (_currentAngle < 0) {
+  //       _currentAngle += 20;
+  //       _isGo = true;
+  //     }
+  //   }
+  //   _lastTime = millis();
+  // }
 
-void moveForward() {
-  digitalWrite(15, HIGH);
-  pcf8574.digitalWrite(3, LOW);
-}
-void moveBackward() {
-  digitalWrite(15, LOW);
-  pcf8574.pinMode(3, HIGH);
-}
-void turnLeft() {
+  // Serial.print("distance:");
+  // Serial.println(_echo->getDistance());
+  // Serial.println("----------------------------");
 
-}
-void turnRight() {
-
+  
+  radar->loop();
 }

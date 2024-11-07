@@ -1,0 +1,19 @@
+{
+    "name":"SensorData",
+    "description":"A library that provides tools to get sensor data",
+    "keywords":"sensor",
+    "authors": [
+      {
+        "name": "TaiWU",
+        "maintainer": true
+      }
+    ],
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/onwebbe/HAMqttDevice.git"
+    },
+    "version": "1.4.0",
+    "frameworks": "arduino",
+    "platforms": ["espressif8266"]
+  }

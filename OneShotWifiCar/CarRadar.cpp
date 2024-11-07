@@ -13,39 +13,34 @@ void CarRadar::init(Adafruit_PCF8574 *pcf, int trigPin, int echoPin, int servoPi
   _servoPin = servoPin;
   _pcf = pcf;
 
-  int freq = 50;      // 频率(20ms周期)
-  int channel = 8;    // 通道(高速通道（0 ~ 7）由80MHz时钟驱动，低速通道（8 ~ 15）由 1MHz 时钟驱动。)
-  int resolution = 8; // 分辨率
-
-  ledcSetup(channel, freq, resolution);
-  ledcAttachPin(_servoPin, channel);
-
   _echo = new EchoControl(_pcf, _trigPin, _echoPin);
-
+  _echo->setup();
+  _myservo = new Servo();
+	// Allow allocation of all timers
+	ESP32PWM::allocateTimer(0);
+	ESP32PWM::allocateTimer(1);
+	ESP32PWM::allocateTimer(2);
+	ESP32PWM::allocateTimer(3);
+	_myservo->setPeriodHertz(50);    // standard 50 hz servo
+	_myservo->attach(_servoPin, 1000, 2000); // attaches the servo on pin 18 to the servo object
   _lastTime = millis();
 }
 
-int CarRadar::calculatePWM(int degree) {
-  //0-180度
-  //20ms周期，高电平0.5-2.5ms，对应0-180度角度
-  const float deadZone = 6.4;//对应0.5ms（0.5ms/(20ms/256）)
-  const float max = 32;//对应2.5ms
-  if (degree < 0)
-    degree = 0;
-  if (degree > 180)
-    degree = 180;
-  return (int)(((max - deadZone) / 180) * degree + deadZone);
-}
 
 void CarRadar::scan(int angle) {
-  ledcWrite(8, calculatePWM(angle));
+  Serial.print("scanning angle:");
+  Serial.println(angle);
+  // _myservo->write(angle);
   float distance = _echo->getDistance();
+  Serial.print("get distance:");
+  Serial.println(distance);
   _radarData[angle] = distance;
 }
 
 void CarRadar::loop() {
   long currentTime = millis();
   if ((currentTime - _lastTime) > _timeGap || (currentTime - _lastTime) < 0) {
+    Serial.println("radar loop start");
     scan(_currentAngle);
     if (_isGo) {
       _currentAngle += 10;
@@ -62,4 +57,9 @@ void CarRadar::loop() {
     }
     _lastTime = millis();
   }
+}
+
+void CarRadar::setTrigPinAPCF(bool isAPCF) {
+  _trigPinAPCF = isAPCF;
+  _echo->setTrigPinAPCF(_trigPinAPCF);
 }

@@ -13,9 +13,13 @@ class EchoControl {
 
     Adafruit_PCF8574 *_pcf;
 
+    bool _trigPinAPCF = false;
+
   public:
     EchoControl(Adafruit_PCF8574 *pcf, int trigPin, int echoPin);
     void setup();
     float getDistance();
+
+    void setTrigPinAPCF(bool isAPCF);
 };
 #endif

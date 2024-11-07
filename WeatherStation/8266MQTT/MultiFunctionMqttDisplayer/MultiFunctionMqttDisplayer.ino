@@ -18,7 +18,7 @@
 #define YUGANG1_STATUS_CHANNEL "homedevice/sensor/AquariumLight-d003885a.aquariumStatus/text/status"
 #define YUGANG1_COMMAND_CHANNEL "homedevice/yugang4/command"
 
-#define YUGANG2_STATUS_CHANNEL "homedevice/sensor/AquariumLight-42c07296.aquariumStatus/text/status"
+#define YUGANG2_STATUS_CHANNEL "homedevice/sensor/AquariumLight-188eb6c9.aquariumStatus/text/status"
 #define YUGANG2_COMMAND_CHANNEL "homedevice/yugang7/command"
 
 #define YUGANG1_STATUS_LIGHT_CHANNEL "homedevice/light/AquariumLight-42c07296-light/brightness/status"
@@ -27,11 +27,11 @@
 #define YUGANG1_STATUS_HEAT_CHANNEL "homedevice/switch/AquariumLight-42c07296-heater/switch/status"
 #define YUGANG1_STATUS_TEMP_CHANNEL "homedevice/sensor/AquariumLight-42c07296.aquariumTemperature/sensor/status"
 
-#define YUGANG2_STATUS_LIGHT_CHANNEL "homedevice/light/yugang7/lightbrightness/status"
-#define YUGANG2_STATUS_LIGHT_SWITCH_CHANNEL "homedevice/light/yugang7/light/switch"
-#define YUGANG2_STATUS_PUMB_CHANNEL "homedevice/light/yugang7/pumbbrightness/status"
-#define YUGANG2_STATUS_HEAT_CHANNEL "homedevice/switch/yugang7/heater/status"
-#define YUGANG2_STATUS_TEMP_CHANNEL "homedevice/sensor/yugang7/temperature/status"
+#define YUGANG2_STATUS_LIGHT_CHANNEL "homedevice/light/AquariumLight-188eb6c9-light/brightness/status"
+#define YUGANG2_STATUS_LIGHT_SWITCH_CHANNEL "homedevice/light/AquariumLight-188eb6c9-light/light/status"
+#define YUGANG2_STATUS_PUMB_CHANNEL "homedevice/light/AquariumLight-188eb6c9-pumb/brightness/status"
+#define YUGANG2_STATUS_HEAT_CHANNEL "homedevice/switch/AquariumLight-188eb6c9-heater/switch/status"
+#define YUGANG2_STATUS_TEMP_CHANNEL "homedevice/sensor/AquariumLight-188eb6c9.aquariumTemperature/sensor/status"
 #define NEXT_PIN 13
 #define PREV_PIN 12
 
