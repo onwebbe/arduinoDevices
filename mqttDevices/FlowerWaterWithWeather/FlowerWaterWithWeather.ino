@@ -1,4 +1,4 @@
-#include "HAMqttWifiManager.h"
+  #include "HAMqttWifiManager.h"
 #include "HAMqttDeviceBase.h"
 #include "HAMqttLight.h"
 #include "HAMqttSwitch.h"
@@ -13,10 +13,10 @@
 #include "Rain_8266.h"
 #include "GY30_8266.h"
 
-#define DEVICE_NAME "WatererAndWeather-e7170c3d"  // 院子右边浇水电磁阀
+#define DEVICE_NAME "WatererAndWeather-333153da"  // 院子右边浇水电磁阀
 
 
-#define CLIENT_ID "WatererAndWeather-e7170c3d"
+#define CLIENT_ID "WatererAndWeather-333153da"
 #define CLIENT_PASSWORD "waterandweather_123456"
 
 #define WATERING_SWITCHER 14
